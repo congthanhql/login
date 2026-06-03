@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="vi" data-theme="light">
 <head>
@@ -108,6 +107,7 @@ input::placeholder{color:var(--muted);font-weight:400}
 input:focus{border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(79,119,247,.12)}
 .iw:focus-within .ico{color:var(--accent)}
 
+/* Request admin role checkbox */
 .req-admin-wrap{display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(217,119,6,.07);border:1.5px solid rgba(217,119,6,.2);border-radius:11px;margin-bottom:14px;cursor:pointer;transition:all .2s}
 .req-admin-wrap:hover{border-color:rgba(217,119,6,.4)}
 .req-admin-wrap input[type=checkbox]{width:auto;padding:0;background:transparent;border:none;box-shadow:none;width:16px;height:16px;cursor:pointer;accent-color:var(--warning)}
@@ -172,6 +172,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(79,119,247,.1
 .stat-val{font-size:26px;font-weight:800;line-height:1}
 .stat-lbl{font-size:11px;color:var(--text2);font-weight:600;letter-spacing:.5px;margin-top:3px}
 
+/* PENDING ADMIN SECTION */
 .pending-section{background:var(--card);border:1.5px solid rgba(217,119,6,.3);border-radius:20px;overflow:hidden;margin-bottom:24px}
 .pending-head{padding:16px 24px;background:rgba(217,119,6,.06);border-bottom:1px solid rgba(217,119,6,.15);display:flex;align-items:center;gap:10px}
 .pending-head h2{font-size:15px;font-weight:800;color:var(--warning);flex:1}
@@ -230,6 +231,10 @@ td .uemail{font-size:12px;color:var(--text2)}
 .act-reset:hover{background:rgba(217,119,6,.2)}
 .act-rename{background:rgba(79,119,247,.08);border-color:rgba(79,119,247,.3);color:var(--accent)}
 .act-rename:hover{background:rgba(79,119,247,.18)}
+.act-approve{background:rgba(14,164,112,.1);border-color:rgba(14,164,112,.3);color:var(--success)}
+.act-approve:hover{background:rgba(14,164,112,.2)}
+.act-reject{background:rgba(229,62,62,.1);border-color:rgba(229,62,62,.3);color:var(--danger)}
+.act-reject:hover{background:rgba(229,62,62,.2)}
 
 .inline-form{display:none;margin-top:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;animation:fade-up .2s ease both}
 .inline-form.open{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -251,9 +256,7 @@ td .uemail{font-size:12px;color:var(--text2)}
 .sec-notice .sec-icon{font-size:20px;flex-shrink:0;margin-top:1px}
 .sec-notice strong{color:var(--success);display:block;margin-bottom:3px;font-size:13px}
 
-/* DB ERROR NOTICE */
-.db-error-notice{background:rgba(229,62,62,.08);border:1.5px solid rgba(229,62,62,.3);border-radius:14px;padding:14px 18px;margin-bottom:20px;font-size:12.5px;color:var(--danger);font-weight:600;display:none}
-
+/* MODAL */
 #confirmModal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.5);backdrop-filter:blur(6px)}
 #confirmModal.open{display:flex}
 .modal-box{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:32px 28px;max-width:360px;width:100%;box-shadow:var(--shadow);animation:fade-up .25s ease both;text-align:center}
@@ -400,6 +403,7 @@ td .uemail{font-size:12px;color:var(--text2)}
             <input id="r_pass" type="password" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password">
           </div>
         </div>
+        <!-- Request Admin Role -->
         <div class="req-admin-wrap" onclick="toggleAdminReq()">
           <input type="checkbox" id="reqAdminCheck" onclick="event.stopPropagation();toggleAdminReq()">
           <div>
@@ -440,7 +444,7 @@ td .uemail{font-size:12px;color:var(--text2)}
     </div>
     <div class="topbar-right">
       <div class="admin-info">
-        <div class="admin-name" id="adminDisplayName">bioverify</div>
+        <div class="admin-name">bioverify</div>
         <div class="admin-role">● Quản trị viên</div>
       </div>
       <button class="btn-logout" onclick="confirmLogout()">
@@ -456,11 +460,6 @@ td .uemail{font-size:12px;color:var(--text2)}
         <strong>Bảo mật đã được cải thiện (v4)</strong>
         Tài khoản yêu cầu quyền Admin cần được Admin gốc duyệt · Role gán qua DB không thể tự set · Reset MK qua Firebase Auth Email · Username index duy nhất.
       </div>
-    </div>
-
-    <!-- DB ERROR NOTICE -->
-    <div class="db-error-notice" id="dbErrorNotice">
-      ⚠️ <span id="dbErrorMsg"></span>
     </div>
 
     <!-- STATS -->
@@ -521,10 +520,9 @@ import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/fire
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
          updateProfile, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDatabase, ref, set, get, update, remove, onValue, off }
+import { getDatabase, ref, set, get, update, onValue }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-// ─── FIX 1: databaseURL đồng nhất (thêm dấu / cuối) ───
 const cfg = {
   apiKey:            "AIzaSyA-G3BfucCstuMlQDKDsQVu3daQ854tuCQ",
   authDomain:        "csdl-login.firebaseapp.com",
@@ -538,12 +536,11 @@ const app  = initializeApp(cfg);
 const auth = getAuth(app);
 const db   = getDatabase(app);
 
-const ADMIN_EMAIL = "bioverify@googlegroups.com";
+const ADMIN_EMAIL   = "bioverify@googlegroups.com";
+const ROOT_ADMIN_UID_KEY = "root_admin_uid"; // stored in /config/root_admin_uid
 
 let allUsers      = [];
 let pendingAction = null;
-// ─── FIX 2: lưu unsubscribe fn để tránh duplicate listener ───
-let usersListenerUnsubscribe = null;
 
 /* ════════ WELCOME ════════ */
 (function initWelcome(){
@@ -563,14 +560,10 @@ let usersListenerUnsubscribe = null;
   };
   requestAnimationFrame(tick);
 })();
-
 function endWelcome(){
   const ws=document.getElementById('welcomeScreen');
   ws.classList.add('hide');
-  ws.addEventListener('animationend',()=>{
-    ws.style.display='none';
-    document.getElementById('loginApp').style.display='flex';
-  },{once:true});
+  ws.addEventListener('animationend',()=>{ws.style.display='none';document.getElementById('loginApp').style.display='flex';},{once:true});
 }
 
 /* ════════ THEME ════════ */
@@ -595,16 +588,6 @@ function toast(msg,type='ok'){
 }
 const ld=(btn,on)=>{btn.classList.toggle('ld',on);btn.disabled=on};
 
-/* ════════ DB ERROR DISPLAY ════════ */
-function showDbError(msg){
-  const el=document.getElementById('dbErrorNotice');
-  document.getElementById('dbErrorMsg').textContent=msg;
-  el.style.display='block';
-}
-function hideDbError(){
-  document.getElementById('dbErrorNotice').style.display='none';
-}
-
 /* ════════ PANELS ════════ */
 window.showLogin=()=>{
   document.getElementById('pLogin').classList.add('on'); document.getElementById('pReg').classList.remove('on');
@@ -619,6 +602,7 @@ window.showRegister=()=>{
 function showError(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block'}
 function hideError(id){document.getElementById(id).style.display='none'}
 
+/* ════════ TOGGLE ADMIN REQUEST ════════ */
 window.toggleAdminReq=()=>{
   const cb=document.getElementById('reqAdminCheck');
   cb.checked=!cb.checked;
@@ -650,6 +634,8 @@ window.register=async()=>{
   if(!name||!username||!email||!pass){showError('regError','⚠️ Vui lòng điền đầy đủ thông tin');return}
   if(username.length<3){showError('regError','⚠️ Username phải có ít nhất 3 ký tự');return}
   if(pass.length<6){showError('regError','⚠️ Mật khẩu tối thiểu 6 ký tự');return}
+
+  /* Không cho phép đăng ký trực tiếp với email admin gốc */
   if(email.toLowerCase()===ADMIN_EMAIL.toLowerCase()){
     showError('regError','❌ Email này không được phép đăng ký');return;
   }
@@ -662,6 +648,8 @@ window.register=async()=>{
     const cred=await createUserWithEmailAndPassword(auth,email,pass);
     await updateProfile(cred.user,{displayName:name});
     const uid=cred.user.uid;
+
+    /* role: nếu reqAdmin → 'pending_admin', ngược lại → 'user' */
     const role = reqAdmin ? 'pending_admin' : 'user';
 
     await set(ref(db,'users/'+uid),{
@@ -705,9 +693,11 @@ window.login=async()=>{
     }
     const cred=await signInWithEmailAndPassword(auth,email,pass);
     const uid=cred.user.uid;
+    const snap=await get(ref(db,'users/'+uid));
 
-    // Admin gốc
+    /* Admin gốc: kiểm tra email trực tiếp */
     if(email.toLowerCase()===ADMIN_EMAIL.toLowerCase()){
+      /* Tự động tạo/cập nhật record admin gốc trong DB nếu chưa có */
       const adminSnap = await get(ref(db,'users/'+uid));
       if(!adminSnap.exists()){
         await set(ref(db,'users/'+uid),{
@@ -718,8 +708,6 @@ window.login=async()=>{
       } else if(adminSnap.val().role!=='admin'){
         await update(ref(db,'users/'+uid),{role:'admin'});
       }
-      const adminName = adminSnap.exists() ? (adminSnap.val().name || 'bioverify') : 'bioverify';
-      document.getElementById('adminDisplayName').textContent = adminName;
       showResult('👑','Xin Chào Quản Trị Viên!','Đang tải trang quản trị...','blue',2000,()=>{
         document.getElementById('loginApp').style.display='none';
         document.getElementById('adminApp').style.display='block';
@@ -728,7 +716,6 @@ window.login=async()=>{
       return;
     }
 
-    const snap=await get(ref(db,'users/'+uid));
     if(!snap.exists()){
       showError('loginError','⚠️ Tài khoản không tồn tại trong hệ thống.');
       await signOut(auth); return;
@@ -738,12 +725,12 @@ window.login=async()=>{
       showError('loginError','🔒 Tài khoản của bạn đang tạm khóa. Vui lòng liên hệ Admin.');
       await signOut(auth); return;
     }
+    /* Tài khoản đang chờ duyệt admin */
     if(u.role==='pending_admin'){
       showError('loginError','⏳ Tài khoản của bạn đang chờ Admin duyệt quyền. Vui lòng thử lại sau.');
       await signOut(auth); return;
     }
     if(u.role==='admin'){
-      document.getElementById('adminDisplayName').textContent = u.name || 'Admin';
       showResult('👑','Xin Chào Quản Trị Viên!','Đang tải trang quản trị...','blue',2000,()=>{
         document.getElementById('loginApp').style.display='none';
         document.getElementById('adminApp').style.display='block';
@@ -758,6 +745,7 @@ window.login=async()=>{
   finally{ld(btn,false)}
 };
 
+/* ════════ FIREBASE ERRORS → Tiếng Việt ════════ */
 function firebaseErrVi(code){
   const map={
     'auth/user-not-found':      'Email chưa được đăng ký',
@@ -768,63 +756,15 @@ function firebaseErrVi(code){
     'auth/weak-password':       'Mật khẩu quá yếu, tối thiểu 6 ký tự',
     'auth/too-many-requests':   'Quá nhiều lần thử. Vui lòng thử lại sau',
     'auth/network-request-failed':'Lỗi kết nối mạng',
-    'auth/permission-denied':   'Không có quyền truy cập dữ liệu',
   };
   return map[code]||('Đã có lỗi xảy ra ('+code+')');
 }
 
-/* ════════ LOAD USERS — FIX 3: detach listener trước khi attach mới ════════ */
+/* ════════ LOAD USERS ════════ */
 function loadUsers(){
-  hideDbError();
-  // Detach listener cũ nếu có
-  if(usersListenerUnsubscribe){
-    usersListenerUnsubscribe();
-    usersListenerUnsubscribe = null;
-  }
-
-  document.getElementById('tblLoading').style.display='block';
-  document.getElementById('usersTable').style.display='none';
-
-  const usersRef = ref(db,'users');
-
-  // ─── FIX 4: dùng get() lần đầu để kiểm tra lỗi permission trước ───
-  get(usersRef).then(snap => {
-    processUsersSnapshot(snap);
-    document.getElementById('tblLoading').style.display='none';
-
-    // Sau khi get() thành công, đăng ký realtime listener
-    usersListenerUnsubscribe = onValue(usersRef, snap => {
-      processUsersSnapshot(snap);
-    }, err => {
-      // ─── FIX 5: bắt lỗi permission từ onValue ───
-      console.error('onValue error:', err);
-      showDbError('Lỗi realtime listener: ' + err.message + ' — Kiểm tra Firebase Rules.');
-      document.getElementById('tblLoading').style.display='none';
-    });
-
-  }).catch(err => {
-    // ─── FIX 6: bắt lỗi permission/network từ get() ───
-    console.error('get users error:', err);
-    document.getElementById('tblLoading').style.display='none';
-    let msg = err.message || err.code || String(err);
-    if(err.code === 'PERMISSION_DENIED' || msg.includes('permission')){
-      msg = 'Firebase Rules từ chối quyền đọc. Vào Firebase Console → Realtime Database → Rules → đặt: { "rules": { ".read": "auth != null", ".write": "auth != null" } }';
-    }
-    showDbError('❌ Không thể tải dữ liệu: ' + msg);
-    // Hiển thị bảng trống
-    allUsers = [];
-    renderPendingAdmins([]);
-    renderUsers([]);
-    updateStats([]);
-    document.getElementById('usersTable').style.display='none';
-    document.getElementById('emptyState').style.display='block';
-  });
-}
-
-function processUsersSnapshot(snap){
-  allUsers=[];
-  if(snap && snap.exists()){
-    snap.forEach(c=>{
+  onValue(ref(db,'users'),snap=>{
+    allUsers=[];
+    if(snap.exists()) snap.forEach(c=>{
       const v=c.val();
       allUsers.push({
         key:c.key, name:v.name||'—', email:v.email||'—',
@@ -833,19 +773,13 @@ function processUsersSnapshot(snap){
         adminRequestAt: v.adminRequestAt||null
       });
     });
-  }
-  renderPendingAdmins(allUsers.filter(u=>u.role==='pending_admin'));
-  const nonPending = allUsers.filter(u=>u.role!=='pending_admin');
-  renderUsers(nonPending);
-  updateStats(allUsers);
-  document.getElementById('tblLoading').style.display='none';
-  if(nonPending.length){
-    document.getElementById('usersTable').style.display='table';
-    document.getElementById('emptyState').style.display='none';
-  } else {
-    document.getElementById('usersTable').style.display='none';
-    document.getElementById('emptyState').style.display='block';
-  }
+    renderPendingAdmins(allUsers.filter(u=>u.role==='pending_admin'));
+    renderUsers(allUsers.filter(u=>u.role!=='pending_admin'));
+    updateStats(allUsers);
+    document.getElementById('tblLoading').style.display='none';
+    const nonPending=allUsers.filter(u=>u.role!=='pending_admin');
+    document.getElementById('usersTable').style.display=nonPending.length?'table':'none';
+  });
 }
 
 function updateStats(users){
@@ -858,6 +792,7 @@ function updateStats(users){
   document.getElementById('userCount').textContent=`— ${nonPending.length} tài khoản`;
 }
 
+/* ════════ RENDER PENDING ADMIN REQUESTS ════════ */
 function renderPendingAdmins(pending){
   const section=document.getElementById('pendingSection');
   const list=document.getElementById('pendingList');
@@ -883,6 +818,7 @@ function renderPendingAdmins(pending){
     </div>`}).join('');
 }
 
+/* ════════ RENDER USER TABLE ════════ */
 function renderUsers(users){
   const tbody=document.getElementById('usersTbody');
   const empty=document.getElementById('emptyState');
@@ -907,7 +843,7 @@ function renderUsers(users){
             ?`<button class="act-btn act-unlock" onclick="promptUnlock('${u.key}','${esc(u.name)}')">🔓 Mở khóa</button>`
             :`<button class="act-btn act-lock"   onclick="promptLock('${u.key}','${esc(u.name)}')">🔒 Khóa</button>`}
           <button class="act-btn act-rename" onclick="toggleRenameForm('${u.key}','${esc(u.name)}','${esc(u.username)}')">✏️ Đổi tên</button>
-          <button class="act-btn act-reset"  onclick="toggleResetForm('${u.key}','${esc(u.name)}')">🔑 Reset MK</button>
+          <button class="act-btn act-reset"  onclick="toggleResetForm('${u.key}')">🔑 Reset MK</button>
         </div>
         <!-- RENAME FORM -->
         <div class="inline-form rename-form" id="rnf-${u.key}" style="flex-direction:column;align-items:stretch;gap:10px">
@@ -929,7 +865,7 @@ function renderUsers(users){
           </div>
           <div style="display:flex;gap:8px">
             <button class="btn-save orange" onclick="saveNewPassword('${u.key}','${esc(u.name)}')">💾 Lưu mật khẩu</button>
-            <button class="btn-cancel-form" onclick="toggleResetForm('${u.key}','')">✕ Hủy</button>
+            <button class="btn-cancel-form" onclick="toggleResetForm('${u.key}')">✕ Hủy</button>
           </div>
           <div id="rf-err-${u.key}" style="display:none;font-size:11.5px;color:var(--danger);font-weight:600"></div>
         </div>
@@ -937,12 +873,14 @@ function renderUsers(users){
     </tr>`).join('');
 }
 
+/* ════════ SEARCH ════════ */
 window.filterUsers=()=>{
   const q=document.getElementById('searchInput').value.trim().toLowerCase();
   const nonPending=allUsers.filter(u=>u.role!=='pending_admin');
   renderUsers(q?nonPending.filter(u=>u.name.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)||u.username.toLowerCase().includes(q)):nonPending);
 };
 
+/* ════════ APPROVE / REJECT ADMIN ════════ */
 window.promptApproveAdmin=(key,name)=>{
   pendingAction={type:'approve_admin',key,name};
   openModal('👑','Duyệt quyền Admin?',`Tài khoản <b>${name}</b> sẽ được cấp quyền Admin.`,'success','✅ Duyệt ngay');
@@ -951,14 +889,16 @@ window.promptRejectAdmin=(key,name)=>{
   pendingAction={type:'reject_admin',key,name};
   openModal('❌','Từ chối yêu cầu?',`Tài khoản <b>${name}</b> sẽ bị hạ xuống User thường.`,'danger','❌ Từ chối');
 };
+
+/* ════════ LOCK / UNLOCK ════════ */
 window.promptLock  =(key,name)=>{ pendingAction={type:'lock',key,name};   openModal('🔒','Khóa tài khoản?',`Tài khoản <b>${name}</b> sẽ bị khóa.`,'danger','Khóa ngay'); };
 window.promptUnlock=(key,name)=>{ pendingAction={type:'unlock',key,name}; openModal('🔓','Mở khóa?',`Tài khoản <b>${name}</b> sẽ được mở khóa.`,'success','Mở khóa'); };
 
+/* ════════ RENAME + USERNAME ════════ */
 window.toggleRenameForm=(key,currentName,currentUsername)=>{
   const rf=document.getElementById('rf-'+key);
   if(rf) rf.classList.remove('open');
   const rnf=document.getElementById('rnf-'+key);
-  if(!rnf) return;
   rnf.classList.toggle('open');
   if(rnf.classList.contains('open')){
     document.getElementById('nn-'+key).value=currentName==='—'?'':currentName;
@@ -966,7 +906,6 @@ window.toggleRenameForm=(key,currentName,currentUsername)=>{
     document.getElementById('nn-'+key).focus();
   }
 };
-
 window.saveName=async(key)=>{
   const newName=document.getElementById('nn-'+key).value.trim();
   const newUsername=document.getElementById('nu-'+key).value.trim().toLowerCase().replace(/[^a-z0-9_\.]/g,'');
@@ -979,14 +918,8 @@ window.saveName=async(key)=>{
       const oldUser=allUsers.find(x=>x.key===key);
       if(newUsername!==oldUser?.username){
         const snap=await get(ref(db,'usernames/'+newUsername));
-        if(snap.exists()&&snap.val()!==key){
-          errEl.textContent='Username "@'+newUsername+'" đã được sử dụng';
-          errEl.style.display='block';return;
-        }
-        // ─── FIX 7: dùng remove() thay vì update(..., null) ───
-        if(oldUser?.username&&oldUser.username!=='—'){
-          await remove(ref(db,'usernames/'+oldUser.username));
-        }
+        if(snap.exists()&&snap.val()!==key){errEl.textContent='Username "@'+newUsername+'" đã được sử dụng';errEl.style.display='block';return;}
+        if(oldUser?.username&&oldUser.username!=='—') await update(ref(db,'usernames/'+oldUser.username),null);
         await set(ref(db,'usernames/'+newUsername),key);
       }
     }
@@ -1002,11 +935,11 @@ window.saveName=async(key)=>{
   }catch(e){ toast('Lỗi khi lưu: '+e.message,'err') }
 };
 
-window.toggleResetForm=(key, name)=>{
+/* ════════ RESET PASSWORD — Admin nhập trực tiếp ════════ */
+window.toggleResetForm=key=>{
   const rnf=document.getElementById('rnf-'+key);
   if(rnf) rnf.classList.remove('open');
   const rf=document.getElementById('rf-'+key);
-  if(!rf) return;
   rf.classList.toggle('open');
   if(rf.classList.contains('open')){
     const inp=document.getElementById('np-'+key);
@@ -1015,9 +948,7 @@ window.toggleResetForm=(key, name)=>{
     if(err) err.style.display='none';
   }
 };
-
-// ─── FIX 8: đổi tên hàm thành saveNewPassword (khớp với HTML) ───
-window.saveNewPassword=async(key,name)=>{
+window.saveNewPass=async(key,name)=>{
   const inp=document.getElementById('np-'+key);
   const errEl=document.getElementById('rf-err-'+key);
   const newPass=inp?inp.value:'';
@@ -1033,47 +964,44 @@ window.saveNewPassword=async(key,name)=>{
   }catch(e){ toast('Lỗi: '+e.message,'err'); }
 };
 
+/* ════════ LOGOUT ════════ */
 window.confirmLogout=()=>{ pendingAction={type:'logout'}; openModal('🚪','Đăng xuất?','Bạn sẽ thoát khỏi trang quản trị.','danger','Đăng xuất'); };
 
+/* ════════ EXECUTE CONFIRM ════════ */
 window.executeConfirm=async()=>{
   closeModal();
   if(!pendingAction) return;
   const{type,key,name}=pendingAction; pendingAction=null;
 
   if(type==='logout'){
-    // ─── FIX 9: detach listener khi logout ───
-    if(usersListenerUnsubscribe){
-      usersListenerUnsubscribe();
-      usersListenerUnsubscribe=null;
-    }
     await signOut(auth);
     document.getElementById('adminApp').style.display='none';
     document.getElementById('loginApp').style.display='flex';
     document.getElementById('l_ident').value='';
     document.getElementById('l_pass').value='';
-    allUsers=[];
     toast('Đã đăng xuất','info'); return;
   }
   if(type==='approve_admin'){
     try{
       await update(ref(db,'users/'+key),{role:'admin', adminRequestAt:null, approvedAt:Date.now()});
       toast(`👑 Đã duyệt quyền Admin cho ${name}`,'ok');
-    }catch(e){ toast('Lỗi: '+e.message,'err') }
+    }catch{ toast('Lỗi kết nối, thử lại sau','err') }
     return;
   }
   if(type==='reject_admin'){
     try{
       await update(ref(db,'users/'+key),{role:'user', adminRequestAt:null, rejectedAt:Date.now()});
       toast(`❌ Đã từ chối yêu cầu của ${name}`,'warn');
-    }catch(e){ toast('Lỗi: '+e.message,'err') }
+    }catch{ toast('Lỗi kết nối, thử lại sau','err') }
     return;
   }
   try{
     if(type==='lock')  { await update(ref(db,'users/'+key),{locked:true});  toast(`🔒 Đã khóa tài khoản ${name}`,'warn'); }
     if(type==='unlock'){ await update(ref(db,'users/'+key),{locked:false}); toast(`🔓 Đã mở khóa ${name}`,'ok'); }
-  }catch(e){ toast('Lỗi: '+e.message,'err') }
+  }catch{ toast('Lỗi kết nối, thử lại sau','err') }
 };
 
+/* ════════ MODAL ════════ */
 function openModal(icon,title,msg,type,label){
   document.getElementById('modalIcon').textContent=icon;
   document.getElementById('modalTitle').textContent=title;
@@ -1087,6 +1015,7 @@ document.getElementById('confirmModal').addEventListener('click',e=>{
   if(e.target===document.getElementById('confirmModal')) closeModal();
 });
 
+/* ════════ UTILS ════════ */
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
 document.addEventListener('keydown',e=>{

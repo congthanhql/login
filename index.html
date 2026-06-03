@@ -26,7 +26,6 @@
 html{font-size:15px;scroll-behavior:smooth}
 body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .35s,color .35s}
 
-/* ── BACKGROUND ── */
 .bg-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .orb{position:absolute;border-radius:50%;filter:blur(80px);animation:drift 16s ease-in-out infinite alternate}
 .orb-1{width:520px;height:520px;background:var(--orb1);top:-180px;left:-120px}
@@ -36,29 +35,19 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .bg-dots{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(circle,var(--border) 1.2px,transparent 1.2px);background-size:26px 26px;opacity:.6}
 .bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(79,119,247,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(79,119,247,.03) 1px,transparent 1px);background-size:40px 40px}
 
-/* ── THEME TOGGLE ── */
 .theme-btn{position:fixed;top:14px;right:14px;z-index:300;background:var(--card);border:1.5px solid var(--border);border-radius:50px;padding:7px 12px 7px 10px;display:flex;align-items:center;gap:7px;cursor:pointer;box-shadow:var(--shadow-sm);transition:all .3s;font-size:12px;font-weight:700;color:var(--muted)}
 .theme-btn:hover{color:var(--accent);border-color:var(--accent)}
 .track{width:34px;height:18px;background:var(--toggle-bg);border-radius:18px;position:relative;flex-shrink:0;transition:background .3s}
 .thumb{position:absolute;top:3px;left:3px;width:12px;height:12px;background:var(--accent);border-radius:50%;transition:transform .3s}
 [data-theme="dark"] .thumb{transform:translateX(16px)}
 
-/* ══════════════════════════════════════
-   WELCOME ANIMATION SCREEN
-══════════════════════════════════════ */
-#welcomeScreen{
-  position:fixed;inset:0;z-index:500;
-  background:linear-gradient(135deg,#0c1033 0%,#1a1060 50%,#0c1033 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  overflow:hidden;
-}
+/* WELCOME */
+#welcomeScreen{position:fixed;inset:0;z-index:500;background:linear-gradient(135deg,#0c1033 0%,#1a1060 50%,#0c1033 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
 #welcomeScreen.hide{animation:welcomeOut .8s cubic-bezier(.7,0,.3,1) forwards}
 @keyframes welcomeOut{to{opacity:0;transform:scale(1.04)}}
-
 .ws-stars{position:absolute;inset:0;overflow:hidden}
 .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,2s) ease-in-out infinite alternate}
 @keyframes twinkle{from{opacity:.1;transform:scale(.8)}to{opacity:.9;transform:scale(1.2)}}
-
 .ws-rings{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 .ring{position:absolute;border-radius:50%;border:1px solid rgba(79,119,247,.15);animation:pulse-ring 4s ease-in-out infinite}
 .ring:nth-child(1){width:200px;height:200px;animation-delay:0s}
@@ -66,49 +55,22 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .ring:nth-child(3){width:480px;height:480px;animation-delay:1.2s}
 .ring:nth-child(4){width:620px;height:620px;animation-delay:1.8s}
 @keyframes pulse-ring{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:.4;transform:scale(1.03)}}
-
 .ws-center{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;gap:0}
-.ws-logo-wrap{
-  width:90px;height:90px;border-radius:22px;
-  background:linear-gradient(135deg,#4f77f7,#7b5cf5);
-  display:flex;align-items:center;justify-content:center;
-  font-size:40px;margin-bottom:24px;
-  box-shadow:0 0 40px rgba(79,119,247,.5),0 0 80px rgba(79,119,247,.2);
-  animation:logo-in .8s cubic-bezier(.34,1.56,.64,1) both;
-}
+.ws-logo-wrap{width:90px;height:90px;border-radius:22px;background:linear-gradient(135deg,#4f77f7,#7b5cf5);display:flex;align-items:center;justify-content:center;font-size:40px;margin-bottom:24px;box-shadow:0 0 40px rgba(79,119,247,.5),0 0 80px rgba(79,119,247,.2);animation:logo-in .8s cubic-bezier(.34,1.56,.64,1) both}
 @keyframes logo-in{from{opacity:0;transform:scale(.4) rotate(-10deg)}to{opacity:1;transform:scale(1) rotate(0)}}
-
-.ws-title{
-  font-size:32px;font-weight:900;letter-spacing:-1px;color:#fff;
-  text-align:center;animation:fade-up .7s .3s ease both;
-}
-.ws-title span{
-  background:linear-gradient(90deg,#7b9fff,#c4b5ff);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
+.ws-title{font-size:32px;font-weight:900;letter-spacing:-1px;color:#fff;text-align:center;animation:fade-up .7s .3s ease both}
+.ws-title span{background:linear-gradient(90deg,#7b9fff,#c4b5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .ws-sub{font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:8px;animation:fade-up .7s .5s ease both}
 .ws-bar-wrap{width:220px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:40px;overflow:hidden;animation:fade-up .7s .7s ease both}
 .ws-bar{height:100%;width:0;background:linear-gradient(90deg,#4f77f7,#7b5cf5);border-radius:2px;transition:width .05s linear}
 .ws-pct{font-size:11px;font-weight:700;color:rgba(255,255,255,.35);margin-top:10px;letter-spacing:1px;animation:fade-up .7s .7s ease both}
-
 @keyframes fade-up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-/* ══════════════════════════════════════
-   RESULT OVERLAY (Approved / Error / Admin greeting)
-══════════════════════════════════════ */
-#resultOverlay{
-  position:fixed;inset:0;z-index:400;
-  display:none;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.55);backdrop-filter:blur(8px);
-}
+/* RESULT OVERLAY */
+#resultOverlay{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(8px)}
 #resultOverlay.show{display:flex;animation:fade-in .3s ease}
 @keyframes fade-in{from{opacity:0}to{opacity:1}}
-.result-box{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:24px;padding:40px 36px;max-width:360px;width:90%;
-  text-align:center;box-shadow:var(--shadow);
-  animation:pop-up .4s cubic-bezier(.34,1.56,.64,1) both;
-}
+.result-box{background:var(--card);border:1.5px solid var(--border);border-radius:24px;padding:40px 36px;max-width:360px;width:90%;text-align:center;box-shadow:var(--shadow);animation:pop-up .4s cubic-bezier(.34,1.56,.64,1) both}
 @keyframes pop-up{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
 .result-icon{font-size:56px;margin-bottom:16px;display:block}
 .result-title{font-size:22px;font-weight:900;margin-bottom:8px}
@@ -118,13 +80,10 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .result-progress-bar.green{background:linear-gradient(90deg,#0ea470,#22d3a5)}
 .result-progress-bar.blue{background:linear-gradient(90deg,#4f77f7,#7b5cf5)}
 
-/* ══════════════════════════════════════
-   LOGIN SCREEN
-══════════════════════════════════════ */
+/* LOGIN */
 #loginApp{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:72px 12px 48px;min-height:100vh;position:relative;z-index:10}
 .wrapper{width:100%;max-width:420px;animation:fade-up .6s ease both;margin:auto}
 .logo{display:flex;flex-direction:column;align-items:center;margin-bottom:22px;animation:fade-up .55s ease both}
-.logo-img{width:72px;height:72px;border-radius:16px;object-fit:cover;border:2px solid rgba(79,119,247,.18);box-shadow:0 6px 24px rgba(79,119,247,.15);margin-bottom:10px;background:#fff}
 .logo-title{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.2px;text-align:center}
 .logo-title span{color:var(--accent)}
 .logo-sub{font-size:10.5px;font-weight:600;letter-spacing:1.8px;color:var(--muted);text-transform:uppercase;margin-top:3px}
@@ -174,9 +133,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(79,119,247,.1
 .panel{display:none;animation:fade-up .28s ease both}
 .panel.on{display:block}
 
-/* ══════════════════════════════════════
-   ADMIN PANEL
-══════════════════════════════════════ */
+/* ADMIN */
 #adminApp{display:none}
 .topbar{position:sticky;top:0;z-index:50;background:rgba(238,242,255,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between}
 [data-theme="dark"] .topbar{background:rgba(8,14,28,.92);border-bottom-color:rgba(255,255,255,.07)}
@@ -236,21 +193,33 @@ td .uemail{font-size:12px;color:var(--text2)}
 .act-unlock:hover{background:rgba(14,164,112,.2)}
 .act-reset{background:rgba(217,119,6,.1);border-color:rgba(217,119,6,.3);color:var(--warning)}
 .act-reset:hover{background:rgba(217,119,6,.2)}
-.reset-form{display:none;margin-top:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;animation:fade-up .2s ease both}
-.reset-form.open{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.reset-form input{flex:1;min-width:140px;background:var(--input-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);padding:8px 12px;font-size:13px;font-family:'Be Vietnam Pro',sans-serif;outline:none;transition:border-color .2s;box-shadow:none}
-.reset-form input:focus{border-color:var(--warning)}
-.btn-save{padding:8px 16px;border-radius:8px;background:linear-gradient(135deg,#f6ad55,#ed8936);border:none;color:#fff;font-family:'Be Vietnam Pro',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:transform .14s;white-space:nowrap}
+/* ── NEW: rename button ── */
+.act-rename{background:rgba(79,119,247,.08);border-color:rgba(79,119,247,.3);color:var(--accent)}
+.act-rename:hover{background:rgba(79,119,247,.18)}
+
+.inline-form{display:none;margin-top:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;animation:fade-up .2s ease both}
+.inline-form.open{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.inline-form input{flex:1;min-width:140px;background:var(--input-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);padding:8px 12px;font-size:13px;font-family:'Be Vietnam Pro',sans-serif;outline:none;transition:border-color .2s;box-shadow:none}
+.inline-form.reset-form input:focus{border-color:var(--warning)}
+.inline-form.rename-form input:focus{border-color:var(--accent)}
+.btn-save{padding:8px 16px;border-radius:8px;border:none;color:#fff;font-family:'Be Vietnam Pro',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:transform .14s;white-space:nowrap}
 .btn-save:hover{transform:translateY(-1px)}
-.btn-cancel-reset{padding:8px 12px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Be Vietnam Pro',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
-.btn-cancel-reset:hover{border-color:var(--text2);color:var(--text)}
+.btn-save.orange{background:linear-gradient(135deg,#f6ad55,#ed8936)}
+.btn-save.blue{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.btn-cancel-form{padding:8px 12px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Be Vietnam Pro',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-cancel-form:hover{border-color:var(--text2);color:var(--text)}
 .empty-state{padding:60px 20px;text-align:center;color:var(--muted)}
 .empty-state .es-icon{font-size:40px;margin-bottom:12px;opacity:.5}
 .empty-state p{font-size:14px;font-weight:600}
 .tbl-loading{padding:50px 20px;text-align:center;color:var(--muted);font-size:13px;font-weight:600}
 .spinner{width:28px;height:28px;margin:0 auto 12px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:rot .7s linear infinite}
 
-/* ── MODAL ── */
+/* ── SECURITY NOTICE BANNER ── */
+.sec-notice{background:rgba(14,164,112,.08);border:1.5px solid rgba(14,164,112,.25);border-radius:14px;padding:14px 18px;margin-bottom:24px;display:flex;align-items:flex-start;gap:12px;font-size:12.5px;color:var(--text2);line-height:1.6}
+.sec-notice .sec-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.sec-notice strong{color:var(--success);display:block;margin-bottom:3px;font-size:13px}
+
+/* MODAL */
 #confirmModal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.5);backdrop-filter:blur(6px)}
 #confirmModal.open{display:flex}
 .modal-box{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:32px 28px;max-width:360px;width:100%;box-shadow:var(--shadow);animation:fade-up .25s ease both;text-align:center}
@@ -265,49 +234,36 @@ td .uemail{font-size:12px;color:var(--text2)}
 .modal-confirm.danger{background:linear-gradient(135deg,#e53e3e,#c53030)}
 .modal-confirm.success{background:linear-gradient(135deg,#0ea470,#059660)}
 .modal-confirm.warning{background:linear-gradient(135deg,#f6ad55,#ed8936)}
+.modal-confirm.blue{background:linear-gradient(135deg,var(--accent),var(--accent2))}
 
-/* ── TOAST ── */
 #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:11px 20px;border-radius:50px;font-size:13px;font-weight:700;display:none;z-index:9999;white-space:nowrap;box-shadow:0 6px 28px rgba(0,0,0,.18);animation:toast-in .3s cubic-bezier(.34,1.56,.64,1) both}
 @keyframes toast-in{from{transform:translateX(-50%) scale(.8);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
 @keyframes rot{to{transform:rotate(360deg)}}
 
 @media(max-width:460px){
-  html{font-size:14px}
-  .card{padding:20px 16px;border-radius:20px}
-  .theme-btn .tlabel{display:none}
-  .btn{padding:14px;font-size:15px}
-  input{font-size:16px}
-  .adm-content{padding:16px}
-  .topbar{padding:0 16px}
-  .admin-info{display:none}
-  .stats-row{grid-template-columns:1fr 1fr}
-  th,td{padding:10px 12px}
-  .btn-logout span{display:none}
-  .btn-logout{padding:8px 10px}
-  .search-wrap input{width:160px}
+  html{font-size:14px}.card{padding:20px 16px;border-radius:20px}.theme-btn .tlabel{display:none}
+  .btn{padding:14px;font-size:15px}input{font-size:16px}.adm-content{padding:16px}.topbar{padding:0 16px}
+  .admin-info{display:none}.stats-row{grid-template-columns:1fr 1fr}th,td{padding:10px 12px}
+  .btn-logout span{display:none}.btn-logout{padding:8px 10px}.search-wrap input{width:160px}
 }
 </style>
 </head>
 <body>
 
-<!-- Backgrounds -->
 <div class="bg-wrap"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
 <div class="bg-dots"></div>
 <div class="bg-grid"></div>
 
-<!-- Theme Toggle -->
 <button class="theme-btn" onclick="toggleTheme()" aria-label="Chuyển giao diện">
   <span id="tIcon">🌙</span>
   <div class="track"><div class="thumb"></div></div>
   <span class="tlabel" id="tLabel">Tối</span>
 </button>
 
-<!-- ══ WELCOME SCREEN ══ -->
+<!-- WELCOME -->
 <div id="welcomeScreen">
   <div class="ws-stars" id="wsStars"></div>
-  <div class="ws-rings">
-    <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
-  </div>
+  <div class="ws-rings"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
   <div class="ws-center">
     <div class="ws-logo-wrap">🔐</div>
     <div class="ws-title">BIO <span>VIP</span> ACCOUNT</div>
@@ -317,7 +273,7 @@ td .uemail{font-size:12px;color:var(--text2)}
   </div>
 </div>
 
-<!-- ══ RESULT OVERLAY ══ -->
+<!-- RESULT OVERLAY -->
 <div id="resultOverlay">
   <div class="result-box">
     <span class="result-icon" id="resIcon">✅</span>
@@ -327,7 +283,7 @@ td .uemail{font-size:12px;color:var(--text2)}
   </div>
 </div>
 
-<!-- ══ LOGIN APP ══ -->
+<!-- LOGIN APP -->
 <div id="loginApp" style="display:none">
   <div class="wrapper">
     <div class="logo">
@@ -340,15 +296,14 @@ td .uemail{font-size:12px;color:var(--text2)}
         <button class="tab on" id="t-login" onclick="showLogin()">Đăng nhập</button>
         <button class="tab" id="t-reg" onclick="showRegister()">Đăng ký</button>
       </div>
-
       <!-- LOGIN -->
       <div class="panel on" id="pLogin">
-        <div class="phead"><h2>Chào mừng trở lại 👋</h2><p>Đăng nhập để truy cập tài khoản VIP</p></div>
+        <div class="phead"><h2>Chào mừng trở lại 👋</h2><p>Đăng nhập bằng username hoặc email</p></div>
         <div class="field">
-          <label>Email</label>
+          <label>Username hoặc Email</label>
           <div class="iw">
-            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
-            <input id="l_email" type="email" placeholder="email@example.com" autocomplete="email">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+            <input id="l_ident" type="text" placeholder="username hoặc email@..." autocomplete="username">
           </div>
         </div>
         <div class="field">
@@ -377,7 +332,6 @@ td .uemail{font-size:12px;color:var(--text2)}
           </a>
         </div>
       </div>
-
       <!-- REGISTER -->
       <div class="panel" id="pReg">
         <div class="phead"><h2>Tạo tài khoản mới ✨</h2><p>Điền thông tin để bắt đầu trải nghiệm</p></div>
@@ -386,6 +340,13 @@ td .uemail{font-size:12px;color:var(--text2)}
           <div class="iw">
             <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
             <input id="r_name" type="text" placeholder="Nguyễn Văn A" autocomplete="name">
+          </div>
+        </div>
+        <div class="field">
+          <label>Username</label>
+          <div class="iw">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
+            <input id="r_username" type="text" placeholder="vd: congthanh123" autocomplete="username" style="text-transform:lowercase">
           </div>
         </div>
         <div class="field">
@@ -425,7 +386,7 @@ td .uemail{font-size:12px;color:var(--text2)}
   </div>
 </div>
 
-<!-- ══ ADMIN APP ══ -->
+<!-- ADMIN APP -->
 <div id="adminApp">
   <div class="topbar">
     <div class="topbar-left">
@@ -445,6 +406,14 @@ td .uemail{font-size:12px;color:var(--text2)}
     </div>
   </div>
   <div class="adm-content">
+    <!-- Security notice -->
+    <div class="sec-notice">
+      <span class="sec-icon">🔒</span>
+      <div>
+        <strong>Bảo mật đã được cải thiện (v3)</strong>
+        Xác minh quyền admin qua DB role · Reset MK qua Firebase Auth Email · Đăng nhập bằng username hoặc email · Index username tại /usernames/ đảm bảo tính duy nhất.
+      </div>
+    </div>
     <div class="stats-row">
       <div class="stat-card"><div class="stat-icon blue">👥</div><div><div class="stat-val" id="sTotalUsers">—</div><div class="stat-lbl">Tổng tài khoản</div></div></div>
       <div class="stat-card"><div class="stat-icon green">✅</div><div><div class="stat-val" id="sActiveUsers">—</div><div class="stat-lbl">Đang hoạt động</div></div></div>
@@ -462,7 +431,7 @@ td .uemail{font-size:12px;color:var(--text2)}
       <div class="tbl-wrap">
         <div class="tbl-loading" id="tblLoading"><div class="spinner"></div>Đang tải dữ liệu...</div>
         <table id="usersTable" style="display:none">
-          <thead><tr><th>Người dùng</th><th>Trạng thái</th><th>Vai trò</th><th>Thao tác</th></tr></thead>
+          <thead><tr><th>Người dùng</th><th>Username</th><th>Trạng thái</th><th>Vai trò</th><th>Thao tác</th></tr></thead>
           <tbody id="usersTbody"></tbody>
         </table>
         <div class="empty-state" id="emptyState" style="display:none"><div class="es-icon">🔍</div><p>Không tìm thấy tài khoản phù hợp</p></div>
@@ -487,12 +456,13 @@ td .uemail{font-size:12px;color:var(--text2)}
 
 <script type="module">
 import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile }
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+         updateProfile, sendPasswordResetEmail, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDatabase, ref, set, get, update, onValue }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-/* ── Firebase config (thay bằng project của bạn) ── */
+/* ── Firebase config ── */
 const cfg = {
   apiKey:            "AIzaSyA-G3BfucCstuMlQDKDsQVu3daQ854tuCQ",
   authDomain:        "csdl-login.firebaseapp.com",
@@ -506,179 +476,172 @@ const app  = initializeApp(cfg);
 const auth = getAuth(app);
 const db   = getDatabase(app);
 
-/* ── Admin email (chỉ dùng để phân quyền, KHÔNG phải mật khẩu) ── */
 const ADMIN_EMAIL = "bioverify@googlegroups.com";
 
 let allUsers      = [];
 let pendingAction = null;
 
-/* ════════════════ WELCOME ANIMATION ════════════════ */
+/* ════════ WELCOME ════════ */
 (function initWelcome(){
-  /* Tạo sao ngẫu nhiên */
   const wrap = document.getElementById('wsStars');
   for(let i=0;i<80;i++){
-    const s = document.createElement('div');
-    s.className = 'star';
-    const sz = Math.random()*2.5+1;
-    s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*3+1).toFixed(1)}s;animation-delay:-${(Math.random()*3).toFixed(1)}s`;
+    const s=document.createElement('div'); s.className='star';
+    const sz=Math.random()*2.5+1;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*3+1).toFixed(1)}s;animation-delay:-${(Math.random()*3).toFixed(1)}s`;
     wrap.appendChild(s);
   }
-  /* Progress bar */
-  const bar   = document.getElementById('wsBar');
-  const pct   = document.getElementById('wsPct');
-  const total = 2200; /* ms */
-  const start = Date.now();
-  const tick  = () => {
-    const p = Math.min((Date.now()-start)/total*100, 100);
-    bar.style.width = p+'%';
-    pct.textContent = Math.round(p)+'%';
-    if(p < 100){ requestAnimationFrame(tick); }
-    else { endWelcome(); }
+  const bar=document.getElementById('wsBar'), pct=document.getElementById('wsPct');
+  const total=2200, start=Date.now();
+  const tick=()=>{
+    const p=Math.min((Date.now()-start)/total*100,100);
+    bar.style.width=p+'%'; pct.textContent=Math.round(p)+'%';
+    p<100?requestAnimationFrame(tick):endWelcome();
   };
   requestAnimationFrame(tick);
 })();
-
 function endWelcome(){
-  const ws = document.getElementById('welcomeScreen');
+  const ws=document.getElementById('welcomeScreen');
   ws.classList.add('hide');
-  ws.addEventListener('animationend',()=>{
-    ws.style.display='none';
-    document.getElementById('loginApp').style.display='flex';
-  },{once:true});
+  ws.addEventListener('animationend',()=>{ws.style.display='none';document.getElementById('loginApp').style.display='flex';},{once:true});
 }
 
-/* ════════════════ THEME ════════════════ */
-const applyTheme = t => {
+/* ════════ THEME ════════ */
+const applyTheme=t=>{
   document.documentElement.setAttribute('data-theme',t);
-  document.getElementById('tIcon').textContent  = t==='dark'?'☀️':'🌙';
-  document.getElementById('tLabel').textContent = t==='dark'?'Sáng':'Tối';
+  document.getElementById('tIcon').textContent=t==='dark'?'☀️':'🌙';
+  document.getElementById('tLabel').textContent=t==='dark'?'Sáng':'Tối';
 };
 applyTheme(localStorage.getItem('bva-theme')||'light');
-window.toggleTheme = ()=>{
-  const next = document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+window.toggleTheme=()=>{
+  const next=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
   applyTheme(next); localStorage.setItem('bva-theme',next);
 };
 
-/* ════════════════ TOAST ════════════════ */
+/* ════════ TOAST ════════ */
 let toastTimer;
 function toast(msg,type='ok'){
-  const el = document.getElementById('toast');
+  const el=document.getElementById('toast');
   const map={ok:'background:#0ea470;color:#fff',err:'background:#e53e3e;color:#fff',info:'background:#4f77f7;color:#fff',warn:'background:#d97706;color:#fff'};
   el.textContent=msg; el.style.cssText=(map[type]||map.ok)+';display:block';
   clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.style.display='none',3200);
 }
-
-/* ════════════════ LOADING BUTTON ════════════════ */
 const ld=(btn,on)=>{btn.classList.toggle('ld',on);btn.disabled=on};
 
-/* ════════════════ PANELS ════════════════ */
+/* ════════ PANELS ════════ */
 window.showLogin=()=>{
-  document.getElementById('pLogin').classList.add('on');
-  document.getElementById('pReg').classList.remove('on');
-  document.getElementById('t-login').classList.add('on');
-  document.getElementById('t-reg').classList.remove('on');
+  document.getElementById('pLogin').classList.add('on'); document.getElementById('pReg').classList.remove('on');
+  document.getElementById('t-login').classList.add('on'); document.getElementById('t-reg').classList.remove('on');
   hideError('loginError'); hideError('regError');
 };
 window.showRegister=()=>{
-  document.getElementById('pReg').classList.add('on');
-  document.getElementById('pLogin').classList.remove('on');
-  document.getElementById('t-reg').classList.add('on');
-  document.getElementById('t-login').classList.remove('on');
+  document.getElementById('pReg').classList.add('on'); document.getElementById('pLogin').classList.remove('on');
+  document.getElementById('t-reg').classList.add('on'); document.getElementById('t-login').classList.remove('on');
   hideError('loginError'); hideError('regError');
 };
 function showError(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block'}
 function hideError(id){document.getElementById(id).style.display='none'}
 
-/* ════════════════ RESULT OVERLAY ════════════════ */
+/* ════════ RESULT OVERLAY ════════ */
 function showResult(icon,title,msg,barColor,duration,cb){
-  const ov  = document.getElementById('resultOverlay');
-  const bar = document.getElementById('resBar');
-  document.getElementById('resIcon').textContent  = icon;
-  document.getElementById('resTitle').textContent = title;
-  document.getElementById('resMsg').textContent   = msg;
-  bar.className = 'result-progress-bar '+barColor;
-  bar.style.transition = 'none'; bar.style.width='0%';
+  const ov=document.getElementById('resultOverlay'), bar=document.getElementById('resBar');
+  document.getElementById('resIcon').textContent=icon;
+  document.getElementById('resTitle').textContent=title;
+  document.getElementById('resMsg').textContent=msg;
+  bar.className='result-progress-bar '+barColor;
+  bar.style.transition='none'; bar.style.width='0%';
   ov.classList.add('show');
-  requestAnimationFrame(()=>{
-    bar.style.transition=`width ${duration}ms linear`;
-    bar.style.width='100%';
-  });
-  setTimeout(()=>{ ov.classList.remove('show'); if(cb) cb(); }, duration+200);
+  requestAnimationFrame(()=>{bar.style.transition=`width ${duration}ms linear`;bar.style.width='100%';});
+  setTimeout(()=>{ov.classList.remove('show');if(cb)cb();},duration+200);
 }
 
-/* ════════════════ REGISTER ════════════════ */
-window.register = async()=>{
-  const name  = document.getElementById('r_name').value.trim();
-  const email = document.getElementById('r_email').value.trim();
-  const pass  = document.getElementById('r_pass').value;
-  const btn   = document.getElementById('btnReg');
+/* ════════ REGISTER ════════ */
+window.register=async()=>{
+  const name    = document.getElementById('r_name').value.trim();
+  const username= document.getElementById('r_username').value.trim().toLowerCase().replace(/[^a-z0-9_\.]/g,'');
+  const email   = document.getElementById('r_email').value.trim();
+  const pass    = document.getElementById('r_pass').value;
+  const btn     = document.getElementById('btnReg');
   hideError('regError');
-  if(!name||!email||!pass){showError('regError','⚠️ Vui lòng điền đầy đủ thông tin');return}
+  if(!name||!username||!email||!pass){showError('regError','⚠️ Vui lòng điền đầy đủ thông tin');return}
+  if(username.length<3){showError('regError','⚠️ Username phải có ít nhất 3 ký tự');return}
   if(pass.length<6){showError('regError','⚠️ Mật khẩu tối thiểu 6 ký tự');return}
   ld(btn,true);
   try{
-    const cred = await createUserWithEmailAndPassword(auth,email,pass);
+    /* Check username uniqueness */
+    const usnap=await get(ref(db,'usernames/'+username));
+    if(usnap.exists()){showError('regError','❌ Username "@'+username+'" đã được sử dụng');return}
+    const cred=await createUserWithEmailAndPassword(auth,email,pass);
     await updateProfile(cred.user,{displayName:name});
-    const uid  = cred.user.uid;
+    const uid=cred.user.uid;
+    /* Write user record + username index atomically-ish */
     await set(ref(db,'users/'+uid),{
-      name, email,
-      role:   email.toLowerCase()===ADMIN_EMAIL.toLowerCase()?'admin':'user',
+      name, username, email,
+      role: email.toLowerCase()===ADMIN_EMAIL.toLowerCase()?'admin':'user',
       locked: false,
       createdAt: Date.now()
     });
+    await set(ref(db,'usernames/'+username),uid);
+    await signOut(auth);
     toast('Đăng ký thành công! 🎉','ok');
-    ['r_name','r_email','r_pass'].forEach(id=>document.getElementById(id).value='');
+    ['r_name','r_username','r_email','r_pass'].forEach(id=>document.getElementById(id).value='');
     setTimeout(showLogin,1600);
-  }catch(e){
-    const msg = firebaseErrVi(e.code);
-    showError('regError','❌ '+msg);
-  }finally{ld(btn,false)}
+  }catch(e){showError('regError','❌ '+firebaseErrVi(e.code));}
+  finally{ld(btn,false)}
 };
 
-/* ════════════════ LOGIN ════════════════ */
-window.login = async()=>{
-  const email = document.getElementById('l_email').value.trim();
-  const pass  = document.getElementById('l_pass').value;
-  const btn   = document.getElementById('btnLogin');
+/* ════════ LOGIN — username OR email ════════
+   If input contains "@" → treat as email directly.
+   Otherwise → lookup /usernames/<input> to resolve the email,
+   then sign in with that email via Firebase Auth.
+═══════════════════════════════════════════ */
+window.login=async()=>{
+  const ident=document.getElementById('l_ident').value.trim();
+  const pass =document.getElementById('l_pass').value;
+  const btn  =document.getElementById('btnLogin');
   hideError('loginError');
-  if(!email||!pass){showError('loginError','⚠️ Vui lòng nhập đầy đủ thông tin');return}
+  if(!ident||!pass){showError('loginError','⚠️ Vui lòng nhập đầy đủ thông tin');return}
   ld(btn,true);
   try{
-    const cred = await signInWithEmailAndPassword(auth,email,pass);
-    const uid  = cred.user.uid;
-    /* Lấy thông tin user từ Realtime Database */
-    const snap = await get(ref(db,'users/'+uid));
-    const isAdmin = email.toLowerCase()===ADMIN_EMAIL.toLowerCase();
-
-    if(snap.exists()){
-      const u = snap.val();
-      if(u.locked===true){
-        showError('loginError','🔒 Tài khoản của bạn đang tạm khóa. Vui lòng liên hệ Admin.');
-        await auth.signOut();
-        return;
+    /* Resolve identifier → email */
+    let email=ident;
+    if(!ident.includes('@')){
+      const usnap=await get(ref(db,'usernames/'+ident.toLowerCase()));
+      if(!usnap.exists()){
+        showError('loginError','❌ Username không tồn tại');return;
       }
+      const uid=usnap.val();
+      const userSnap=await get(ref(db,'users/'+uid));
+      if(!userSnap.exists()){showError('loginError','⚠️ Tài khoản không tồn tại trong hệ thống.');return}
+      email=userSnap.val().email;
     }
-
-    if(isAdmin){
-      /* Admin: chào mừng → admin panel */
+    const cred=await signInWithEmailAndPassword(auth,email,pass);
+    const uid=cred.user.uid;
+    const snap=await get(ref(db,'users/'+uid));
+    if(!snap.exists()){
+      showError('loginError','⚠️ Tài khoản không tồn tại trong hệ thống.');
+      await signOut(auth); return;
+    }
+    const u=snap.val();
+    if(u.locked===true){
+      showError('loginError','🔒 Tài khoản của bạn đang tạm khóa. Vui lòng liên hệ Admin.');
+      await signOut(auth); return;
+    }
+    if(u.role==='admin'){
       showResult('👑','Xin Chào Quản Trị Viên!','Đang tải trang quản trị...','blue',2000,()=>{
         document.getElementById('loginApp').style.display='none';
         document.getElementById('adminApp').style.display='block';
         loadUsers();
       });
     } else {
-      /* User thường: Approved → redirect */
       showResult('✅','Approved!','Đăng nhập thành công. Đang chuyển hướng...','green',2000,()=>{
         window.location.href='https://html.vn';
       });
     }
-  }catch(e){
-    const msg = firebaseErrVi(e.code);
-    showError('loginError','❌ '+msg);
-  }finally{ld(btn,false)}
+  }catch(e){showError('loginError','❌ '+firebaseErrVi(e.code));}
+  finally{ld(btn,false)}
 };
 
-/* ════════════════ FIREBASE ERROR → Tiếng Việt ════════════════ */
+/* ════════ FIREBASE ERRORS → Tiếng Việt ════════ */
 function firebaseErrVi(code){
   const map={
     'auth/user-not-found':      'Email chưa được đăng ký',
@@ -693,13 +656,13 @@ function firebaseErrVi(code){
   return map[code]||('Đã có lỗi xảy ra ('+code+')');
 }
 
-/* ════════════════ ADMIN — LOAD USERS ════════════════ */
+/* ════════ ADMIN — LOAD USERS ════════ */
 function loadUsers(){
   onValue(ref(db,'users'),snap=>{
     allUsers=[];
     if(snap.exists()) snap.forEach(c=>{
       const v=c.val();
-      allUsers.push({key:c.key,name:v.name||'—',email:v.email||'—',role:v.role||'user',locked:v.locked===true});
+      allUsers.push({key:c.key,name:v.name||'—',email:v.email||'—',username:v.username||'—',role:v.role||'user',locked:v.locked===true});
     });
     renderUsers(allUsers);
     updateStats(allUsers);
@@ -708,11 +671,11 @@ function loadUsers(){
   });
 }
 function updateStats(users){
-  document.getElementById('sTotalUsers').textContent  = users.length;
-  document.getElementById('sActiveUsers').textContent = users.filter(u=>!u.locked).length;
-  document.getElementById('sLockedUsers').textContent = users.filter(u=> u.locked).length;
-  document.getElementById('sAdminUsers').textContent  = users.filter(u=>u.role==='admin').length;
-  document.getElementById('userCount').textContent    = `— ${users.length} tài khoản`;
+  document.getElementById('sTotalUsers').textContent=users.length;
+  document.getElementById('sActiveUsers').textContent=users.filter(u=>!u.locked).length;
+  document.getElementById('sLockedUsers').textContent=users.filter(u=>u.locked).length;
+  document.getElementById('sAdminUsers').textContent=users.filter(u=>u.role==='admin').length;
+  document.getElementById('userCount').textContent=`— ${users.length} tài khoản`;
 }
 function renderUsers(users){
   const tbody=document.getElementById('usersTbody');
@@ -722,7 +685,14 @@ function renderUsers(users){
   table.style.display='table';empty.style.display='none';
   tbody.innerHTML=users.map(u=>`
     <tr class="${u.locked?'locked-row':''}" id="row-${u.key}">
-      <td><div class="uname">${esc(u.name)}</div><div class="uemail">${esc(u.email)}</div><div class="uid">#${u.key}</div></td>
+      <td>
+        <div class="uname">${esc(u.name)}</div>
+        <div class="uemail">${esc(u.email)}</div>
+        <div class="uid">#${u.key}</div>
+      </td>
+      <td>
+        <span style="font-family:monospace;font-size:12px;font-weight:700;color:var(--accent);background:rgba(79,119,247,.08);padding:3px 8px;border-radius:6px;border:1px solid rgba(79,119,247,.2)" id="uname-badge-${u.key}">@${esc(u.username)}</span>
+      </td>
       <td><span class="badge ${u.locked?'badge-locked':'badge-active'}">${u.locked?'🔒 Đã khóa':'✅ Hoạt động'}</span></td>
       <td><span class="badge ${u.role==='admin'?'badge-admin':'badge-user'}">${u.role==='admin'?'👑 Admin':'👤 User'}</span></td>
       <td>
@@ -730,68 +700,137 @@ function renderUsers(users){
           ${u.locked
             ?`<button class="act-btn act-unlock" onclick="promptUnlock('${u.key}','${esc(u.name)}')">🔓 Mở khóa</button>`
             :`<button class="act-btn act-lock"   onclick="promptLock('${u.key}','${esc(u.name)}')">🔒 Khóa</button>`}
-          <button class="act-btn act-reset" onclick="toggleResetForm('${u.key}')">🔑 Đặt lại MK</button>
+          <button class="act-btn act-rename" onclick="toggleRenameForm('${u.key}','${esc(u.name)}','${esc(u.username)}')">✏️ Đổi tên / Username</button>
+          <button class="act-btn act-reset"  onclick="toggleResetForm('${u.key}')">🔑 Reset MK</button>
         </div>
-        <div class="reset-form" id="rf-${u.key}">
-          <input type="password" id="np-${u.key}" placeholder="Mật khẩu mới (tối thiểu 6 ký tự)">
-          <button class="btn-save" onclick="savePassword('${u.key}','${esc(u.name)}')">💾 Lưu</button>
-          <button class="btn-cancel-reset" onclick="toggleResetForm('${u.key}')">✕</button>
+
+        <!-- RENAME + USERNAME FORM -->
+        <div class="inline-form rename-form" id="rnf-${u.key}" style="flex-direction:column;align-items:stretch;gap:10px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input type="text" id="nn-${u.key}" placeholder="Họ và tên mới..." maxlength="60" style="flex:1;min-width:120px">
+            <input type="text" id="nu-${u.key}" placeholder="Username mới..." maxlength="30" style="flex:1;min-width:120px;text-transform:lowercase">
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-save blue" onclick="saveName('${u.key}')">💾 Lưu</button>
+            <button class="btn-cancel-form" onclick="toggleRenameForm('${u.key}')">✕ Hủy</button>
+          </div>
+          <div id="rnf-err-${u.key}" style="display:none;font-size:11.5px;color:var(--danger);font-weight:600"></div>
+        </div>
+
+        <!-- RESET PASSWORD FORM -->
+        <div class="inline-form reset-form" id="rf-${u.key}">
+          <span style="font-size:12px;color:var(--text2);flex:1">Gửi email đặt lại mật khẩu tới <b>${esc(u.email)}</b>?</span>
+          <button class="btn-save orange" onclick="sendResetEmail('${u.key}','${esc(u.email)}','${esc(u.name)}')">📧 Gửi email</button>
+          <button class="btn-cancel-form" onclick="toggleResetForm('${u.key}')">✕</button>
         </div>
       </td>
     </tr>`).join('');
 }
 
-/* ════════════════ SEARCH ════════════════ */
+/* ════════ SEARCH ════════ */
 window.filterUsers=()=>{
   const q=document.getElementById('searchInput').value.trim().toLowerCase();
-  renderUsers(q?allUsers.filter(u=>u.name.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)):allUsers);
+  renderUsers(q?allUsers.filter(u=>u.name.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)||u.username.toLowerCase().includes(q)):allUsers);
 };
 
-/* ════════════════ LOCK / UNLOCK ════════════════ */
-window.promptLock  =(key,name)=>{ pendingAction={type:'lock',key,name}; openModal('🔒','Khóa tài khoản?',`Tài khoản <b>${name}</b> sẽ bị khóa.`,'danger','Khóa ngay'); };
-window.promptUnlock=(key,name)=>{ pendingAction={type:'unlock',key,name}; openModal('🔓','Mở khóa tài khoản?',`Tài khoản <b>${name}</b> sẽ được mở khóa.`,'success','Mở khóa'); };
+/* ════════ LOCK / UNLOCK ════════ */
+window.promptLock  =(key,name)=>{ pendingAction={type:'lock',key,name};   openModal('🔒','Khóa tài khoản?',`Tài khoản <b>${name}</b> sẽ bị khóa.`,'danger','Khóa ngay'); };
+window.promptUnlock=(key,name)=>{ pendingAction={type:'unlock',key,name}; openModal('🔓','Mở khóa?',`Tài khoản <b>${name}</b> sẽ được mở khóa.`,'success','Mở khóa'); };
 
-/* ════════════════ RESET PASSWORD ════════════════ */
-window.toggleResetForm=key=>{ const rf=document.getElementById('rf-'+key); rf.classList.toggle('open'); if(rf.classList.contains('open')) document.getElementById('np-'+key).focus(); };
-window.savePassword=(key,name)=>{
-  const np=document.getElementById('np-'+key).value;
-  if(!np||np.length<6){toast('Mật khẩu phải có ít nhất 6 ký tự','err');return}
-  pendingAction={type:'resetPass',key,name,newPass:np};
-  openModal('🔑','Đặt lại mật khẩu?',`Mật khẩu của <b>${name}</b> sẽ được thay đổi.`,'warning','Xác nhận lưu');
+/* ════════ RENAME + USERNAME ════════ */
+window.toggleRenameForm=(key,currentName,currentUsername)=>{
+  const rf=document.getElementById('rf-'+key);
+  if(rf) rf.classList.remove('open');
+  const rnf=document.getElementById('rnf-'+key);
+  rnf.classList.toggle('open');
+  if(rnf.classList.contains('open')){
+    document.getElementById('nn-'+key).value=currentName==='—'?'':currentName;
+    document.getElementById('nu-'+key).value=currentUsername==='—'?'':currentUsername;
+    document.getElementById('nn-'+key).focus();
+  }
+};
+window.saveName=async(key)=>{
+  const newName=document.getElementById('nn-'+key).value.trim();
+  const newUsername=document.getElementById('nu-'+key).value.trim().toLowerCase().replace(/[^a-z0-9_\.]/g,'');
+  const errEl=document.getElementById('rnf-err-'+key);
+  errEl.style.display='none';
+  if(!newName||newName.length<2){errEl.textContent='Tên phải có ít nhất 2 ký tự';errEl.style.display='block';return}
+  if(newUsername&&newUsername.length<3){errEl.textContent='Username phải có ít nhất 3 ký tự';errEl.style.display='block';return}
+  try{
+    /* If username changed, check uniqueness first */
+    if(newUsername){
+      const oldUser=allUsers.find(x=>x.key===key);
+      if(newUsername!==oldUser?.username){
+        const snap=await get(ref(db,'usernames/'+newUsername));
+        if(snap.exists()&&snap.val()!==key){
+          errEl.textContent='Username "@'+newUsername+'" đã được sử dụng';errEl.style.display='block';return;
+        }
+        /* Remove old username index */
+        if(oldUser?.username&&oldUser.username!=='—'){
+          await update(ref(db,'usernames/'+oldUser.username),null);
+        }
+        /* Write new username index */
+        await set(ref(db,'usernames/'+newUsername),key);
+      }
+    }
+    await update(ref(db,'users/'+key),{name:newName,...(newUsername?{username:newUsername}:{})});
+    document.getElementById('rnf-'+key).classList.remove('open');
+    toast(`✅ Đã cập nhật tài khoản`,'ok');
+    const u=allUsers.find(x=>x.key===key);
+    if(u){u.name=newName;if(newUsername)u.username=newUsername;}
+    const nameEl=document.querySelector(`#row-${key} .uname`);
+    if(nameEl) nameEl.textContent=newName;
+    const badgeEl=document.getElementById('uname-badge-'+key);
+    if(badgeEl&&newUsername) badgeEl.textContent='@'+newUsername;
+  }catch(e){ toast('Lỗi khi lưu: '+e.message,'err') }
 };
 
-/* ════════════════ LOGOUT ════════════════ */
+/* ════════ RESET PASSWORD — FIX ════════
+   OLD (broken): wrote plain-text password to DB — didn't change Firebase Auth password.
+   NEW (correct): sends official Firebase password reset email to user's address.
+   The user clicks the link, sets their own new password via Firebase's secure flow.
+═══════════════════════════════════════ */
+window.toggleResetForm=key=>{
+  /* Close rename form if open */
+  const rnf=document.getElementById('rnf-'+key);
+  if(rnf) rnf.classList.remove('open');
+  document.getElementById('rf-'+key).classList.toggle('open');
+};
+window.sendResetEmail=async(key,email,name)=>{
+  try{
+    await sendPasswordResetEmail(auth,email);
+    document.getElementById('rf-'+key).classList.remove('open');
+    toast(`📧 Đã gửi email đặt lại MK tới ${email}`,'ok');
+  }catch(e){ toast('Không gửi được email: '+firebaseErrVi(e.code),'err') }
+};
+
+/* ════════ LOGOUT ════════ */
 window.confirmLogout=()=>{ pendingAction={type:'logout'}; openModal('🚪','Đăng xuất?','Bạn sẽ thoát khỏi trang quản trị.','danger','Đăng xuất'); };
 
-/* ════════════════ EXECUTE CONFIRM ════════════════ */
+/* ════════ EXECUTE CONFIRM ════════ */
 window.executeConfirm=async()=>{
   closeModal();
   if(!pendingAction) return;
-  const{type,key,name,newPass}=pendingAction; pendingAction=null;
+  const{type,key,name}=pendingAction; pendingAction=null;
   if(type==='logout'){
+    await signOut(auth);
     document.getElementById('adminApp').style.display='none';
     document.getElementById('loginApp').style.display='flex';
-    document.getElementById('l_email').value='';
+    document.getElementById('l_ident').value='';
     document.getElementById('l_pass').value='';
     toast('Đã đăng xuất','info'); return;
   }
   try{
-    if(type==='lock')      { await update(ref(db,'users/'+key),{locked:true});  toast(`🔒 Đã khóa tài khoản ${name}`,'warn'); }
-    else if(type==='unlock'){ await update(ref(db,'users/'+key),{locked:false}); toast(`🔓 Đã mở khóa ${name}`,'ok'); }
-    else if(type==='resetPass'){
-      await update(ref(db,'users/'+key),{password:newPass});
-      const rf=document.getElementById('rf-'+key);
-      if(rf){rf.classList.remove('open');document.getElementById('np-'+key).value=''}
-      toast(`✅ Đã đặt lại mật khẩu cho ${name}`,'ok');
-    }
-  }catch{toast('Lỗi kết nối, thử lại sau','err')}
+    if(type==='lock')  { await update(ref(db,'users/'+key),{locked:true});  toast(`🔒 Đã khóa tài khoản ${name}`,'warn'); }
+    if(type==='unlock'){ await update(ref(db,'users/'+key),{locked:false}); toast(`🔓 Đã mở khóa ${name}`,'ok'); }
+  }catch{ toast('Lỗi kết nối, thử lại sau','err') }
 };
 
-/* ════════════════ MODAL ════════════════ */
+/* ════════ MODAL ════════ */
 function openModal(icon,title,msg,type,label){
-  document.getElementById('modalIcon').textContent  = icon;
-  document.getElementById('modalTitle').textContent = title;
-  document.getElementById('modalMsg').innerHTML     = msg;
+  document.getElementById('modalIcon').textContent=icon;
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalMsg').innerHTML=msg;
   const cb=document.getElementById('modalConfirmBtn');
   cb.textContent=label; cb.className='modal-confirm '+type;
   document.getElementById('confirmModal').classList.add('open');
@@ -801,10 +840,9 @@ document.getElementById('confirmModal').addEventListener('click',e=>{
   if(e.target===document.getElementById('confirmModal')) closeModal();
 });
 
-/* ════════════════ UTILS ════════════════ */
+/* ════════ UTILS ════════ */
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
-/* ════════════════ ENTER KEY ════════════════ */
 document.addEventListener('keydown',e=>{
   if(e.key!=='Enter') return;
   if(document.getElementById('loginApp').style.display!=='none'){

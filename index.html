@@ -2,409 +2,499 @@
 <html lang="vi" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>🔐 BIO VIP ACCOUNT</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root[data-theme="light"] {
-  --bg: #f0f4ff;
-  --bg2: #e6ecff;
-  --card: #ffffff;
-  --card2: #f8faff;
-  --border: rgba(0,0,0,0.08);
-  --shadow: 0 20px 60px rgba(79,119,247,0.12);
-  --text: #1a1f36;
-  --muted: #7b83a6;
-  --input-bg: #f4f6ff;
-  --input-border: rgba(79,119,247,0.2);
-  --accent: #4f77f7;
-  --accent2: #7b5cf5;
-  --success: #10b981;
-  --danger: #ef4444;
-  --toggle-bg: #dde3f7;
-  --orb1: rgba(79,119,247,0.12);
-  --orb2: rgba(123,92,245,0.10);
-  --orb3: rgba(16,185,129,0.08);
+/* ======= LIGHT (default) ======= */
+:root {
+  --bg:          #eef2ff;
+  --card:        #ffffff;
+  --border:      #dde3f5;
+  --text:        #1c2140;
+  --text2:       #4a5275;
+  --muted:       #8891b2;
+  --input-bg:    #f5f7ff;
+  --input-focus: #4f77f7;
+  --accent:      #4f77f7;
+  --accent2:     #7b5cf5;
+  --success:     #0ea470;
+  --danger:      #e53e3e;
+  --shadow:      0 8px 40px rgba(79,119,247,.13);
+  --shadow-sm:   0 2px 12px rgba(79,119,247,.08);
+  --tab-active:  #fff;
+  --orb1: rgba(79,119,247,.10);
+  --orb2: rgba(123,92,245,.08);
+  --orb3: rgba(14,164,112,.06);
+  --contact-bg:  #f0f4ff;
+  --contact-border: #cdd6f9;
+  --toggle-bg:   #dde3f7;
+  --divider:     #e4e8f5;
 }
 
-:root[data-theme="dark"] {
-  --bg: #080c14;
-  --bg2: #0d1424;
-  --card: #111827;
-  --card2: #0f172a;
-  --border: rgba(255,255,255,0.07);
-  --shadow: 0 32px 80px rgba(0,0,0,0.5);
-  --text: #e8edf5;
-  --muted: #6b7a99;
-  --input-bg: #0a1020;
-  --input-border: rgba(79,119,247,0.25);
-  --accent: #4f8ef7;
-  --accent2: #7c5cfc;
-  --success: #22d3a5;
-  --danger: #f25c6e;
-  --toggle-bg: #1e293b;
-  --orb1: rgba(79,142,247,0.18);
-  --orb2: rgba(123,92,252,0.15);
-  --orb3: rgba(34,211,165,0.10);
+[data-theme="dark"] {
+  --bg:          #0c1022;
+  --card:        #131929;
+  --border:      rgba(255,255,255,.07);
+  --text:        #e4eaf8;
+  --text2:       #9aa5c4;
+  --muted:       #5d6a8a;
+  --input-bg:    #0a1020;
+  --input-focus: #5b8af8;
+  --accent:      #5b8af8;
+  --accent2:     #8b6fff;
+  --success:     #22d3a5;
+  --danger:      #f56565;
+  --shadow:      0 16px 60px rgba(0,0,0,.5);
+  --shadow-sm:   0 4px 20px rgba(0,0,0,.3);
+  --tab-active:  #1e2a45;
+  --orb1: rgba(91,138,248,.15);
+  --orb2: rgba(139,111,255,.12);
+  --orb3: rgba(34,211,165,.08);
+  --contact-bg:  #111a30;
+  --contact-border: rgba(255,255,255,.08);
+  --toggle-bg:   #1e2a45;
+  --divider:     rgba(255,255,255,.06);
 }
 
+/* ======= BASE ======= */
+html { font-size: 15px; }
 body {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Be Vietnam Pro', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  transition: background 0.4s, color 0.4s;
+  padding: 16px 12px 32px;
+  transition: background .35s, color .35s;
+  position: relative;
+  overflow-x: hidden;
 }
 
-/* Ambient orbs */
-.bg-ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+/* ======= BACKGROUND ======= */
+.bg-wrap { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .orb {
-  position: absolute; border-radius: 50%;
-  animation: drift 14s ease-in-out infinite alternate;
+  position: absolute; border-radius: 50%; filter: blur(80px);
+  animation: drift 16s ease-in-out infinite alternate;
 }
-.orb-1 { width: 600px; height: 600px; background: var(--orb1); filter: blur(90px); top: -200px; left: -150px; animation-delay: 0s; }
-.orb-2 { width: 450px; height: 450px; background: var(--orb2); filter: blur(80px); bottom: -100px; right: -80px; animation-delay: -5s; }
-.orb-3 { width: 300px; height: 300px; background: var(--orb3); filter: blur(70px); top: 50%; left: 55%; animation-delay: -9s; }
+.orb-1 { width: 520px; height: 520px; background: var(--orb1); top: -180px; left: -120px; }
+.orb-2 { width: 400px; height: 400px; background: var(--orb2); bottom: -80px; right: -80px; animation-delay: -6s; }
+.orb-3 { width: 260px; height: 260px; background: var(--orb3); top: 45%; left: 58%; animation-delay: -11s; }
 @keyframes drift {
   from { transform: translate(0,0) scale(1); }
-  to   { transform: translate(25px,18px) scale(1.06); }
+  to   { transform: translate(22px,16px) scale(1.07); }
 }
-
-/* Pattern bg */
 .bg-dots {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
-  background-size: 28px 28px;
+  background-image: radial-gradient(circle, var(--border) 1.2px, transparent 1.2px);
+  background-size: 26px 26px;
+  opacity: .6;
 }
 
-/* Theme toggle */
-.theme-toggle {
-  position: fixed; top: 20px; right: 20px; z-index: 100;
+/* ======= THEME TOGGLE ======= */
+.theme-btn {
+  position: fixed; top: 14px; right: 14px; z-index: 200;
   background: var(--card);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: 50px;
-  padding: 8px 14px;
-  display: flex; align-items: center; gap: 8px;
+  padding: 7px 12px 7px 10px;
+  display: flex; align-items: center; gap: 7px;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  transition: all 0.3s;
-  font-size: 13px; font-weight: 600; color: var(--muted);
-  user-select: none;
+  box-shadow: var(--shadow-sm);
+  transition: all .3s;
+  font-size: 12px; font-weight: 700; color: var(--muted);
+  white-space: nowrap;
 }
-.theme-toggle:hover { box-shadow: 0 6px 24px rgba(79,119,247,0.2); color: var(--accent); }
-.toggle-track {
-  width: 38px; height: 20px;
+.theme-btn:hover { color: var(--accent); border-color: var(--accent); }
+.track {
+  width: 34px; height: 18px;
   background: var(--toggle-bg);
-  border-radius: 20px; position: relative;
-  transition: background 0.3s;
+  border-radius: 18px; position: relative; flex-shrink: 0;
+  transition: background .3s;
 }
-.toggle-thumb {
+.thumb {
   position: absolute; top: 3px; left: 3px;
-  width: 14px; height: 14px;
-  background: var(--accent);
-  border-radius: 50%;
-  transition: transform 0.3s;
+  width: 12px; height: 12px;
+  background: var(--accent); border-radius: 50%;
+  transition: transform .3s;
 }
-[data-theme="dark"] .toggle-thumb { transform: translateX(18px); }
-[data-theme="dark"] .toggle-track { background: #2d3a5a; }
+[data-theme="dark"] .thumb { transform: translateX(16px); }
 
-/* Wrapper */
+/* ======= WRAPPER ======= */
 .wrapper {
   position: relative; z-index: 10;
-  width: 100%; max-width: 440px;
-  padding: 20px;
-  animation: fadeUp 0.7s ease both;
+  width: 100%; max-width: 420px;
+  animation: fadeUp .6s ease both;
 }
 
-/* Logo area */
+/* ======= LOGO ======= */
 .logo {
-  text-align: center;
-  margin-bottom: 28px;
-  animation: fadeDown 0.6s ease both;
+  display: flex; flex-direction: column; align-items: center;
+  margin-bottom: 22px;
+  animation: fadeDown .55s ease both;
 }
 .logo-img {
-  width: 72px; height: 72px;
-  border-radius: 20px;
-  object-fit: cover;
+  width: 68px; height: 68px;
+  border-radius: 18px; object-fit: cover;
+  border: 2.5px solid rgba(79,119,247,.22);
+  box-shadow: 0 6px 24px rgba(79,119,247,.18);
   margin-bottom: 10px;
-  box-shadow: 0 8px 32px rgba(79,119,247,0.25);
-  border: 2px solid rgba(79,119,247,0.2);
 }
-.logo-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  color: var(--text);
-  line-height: 1.2;
+.logo-title {
+  font-size: 17px; font-weight: 800;
+  color: var(--text); letter-spacing: -.2px; text-align: center;
 }
-.logo-name span { color: var(--accent); }
+.logo-title span { color: var(--accent); }
 .logo-sub {
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-top: 4px;
-  font-weight: 600;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 1.8px;
+  color: var(--muted); text-transform: uppercase; margin-top: 3px;
 }
 
-/* Card */
+/* ======= CARD ======= */
 .card {
   background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 36px;
+  border: 1.5px solid var(--border);
+  border-radius: 22px;
+  padding: 28px 24px 24px;
   box-shadow: var(--shadow);
-  transition: background 0.4s, border-color 0.4s;
+  transition: background .35s, border-color .35s;
 }
 
-.card-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 4px;
-  color: var(--text);
-}
-.card-subtitle {
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 28px;
-  font-weight: 400;
-}
-
-/* Tab switcher */
+/* ======= TABS ======= */
 .tabs {
   display: flex;
   background: var(--input-bg);
+  border: 1.5px solid var(--border);
   border-radius: 12px;
-  padding: 4px;
-  margin-bottom: 24px;
-  border: 1px solid var(--border);
+  padding: 4px; gap: 4px;
+  margin-bottom: 22px;
 }
-.tab-btn {
-  flex: 1; padding: 9px;
+.tab {
+  flex: 1; padding: 9px 8px;
   border: none; background: transparent;
   border-radius: 9px;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Be Vietnam Pro', sans-serif;
   font-size: 13px; font-weight: 700;
-  color: var(--muted);
-  cursor: pointer;
-  transition: all 0.25s;
-  letter-spacing: 0.3px;
+  color: var(--muted); cursor: pointer;
+  transition: all .22s; letter-spacing: .2px;
 }
-.tab-btn.active {
-  background: var(--card);
+.tab.on {
+  background: var(--tab-active);
   color: var(--accent);
-  box-shadow: 0 2px 12px rgba(79,119,247,0.15);
+  box-shadow: 0 2px 10px rgba(79,119,247,.14);
 }
 
-/* Fields */
-.field { margin-bottom: 18px; }
+/* ======= HEADING ======= */
+.phead { margin-bottom: 18px; }
+.phead h2 {
+  font-size: 18px; font-weight: 800; color: var(--text);
+  letter-spacing: -.3px; margin-bottom: 2px;
+}
+.phead p { font-size: 12.5px; color: var(--muted); font-weight: 400; }
+
+/* ======= FIELD ======= */
+.field { margin-bottom: 14px; }
 .field label {
   display: block;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 8px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .9px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 6px;
 }
-.input-wrap { position: relative; }
-.input-icon {
-  position: absolute; left: 14px; top: 50%;
+.iw { position: relative; }
+.ico {
+  position: absolute; left: 13px; top: 50%;
   transform: translateY(-50%);
-  color: var(--muted); pointer-events: none; display: flex;
-  transition: color 0.2s;
+  color: var(--muted); pointer-events: none;
+  display: flex; transition: color .2s;
 }
-.input-icon svg { width: 15px; height: 15px; }
-
+.ico svg { width: 14px; height: 14px; }
 input {
   width: 100%;
-  padding: 12px 14px 12px 42px;
+  padding: 11px 12px 11px 40px;
   background: var(--input-bg);
-  border: 1.5px solid var(--input-border);
-  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 11px;
   color: var(--text);
-  font-size: 14px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 500;
-  transition: border-color 0.2s, box-shadow 0.2s, background 0.4s;
-  outline: none;
+  font-size: 14px; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 500;
+  transition: border-color .2s, box-shadow .2s, background .35s;
+  outline: none; -webkit-appearance: none;
 }
 input::placeholder { color: var(--muted); font-weight: 400; }
 input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(79,119,247,0.12);
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3.5px rgba(79,119,247,.12);
 }
-.input-wrap:focus-within .input-icon { color: var(--accent); }
+.iw:focus-within .ico { color: var(--accent); }
 
-/* Buttons */
+/* ======= BUTTON ======= */
 .btn {
-  width: 100%; padding: 13px;
+  width: 100%; padding: 12.5px;
   border: none; border-radius: 12px;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Be Vietnam Pro', sans-serif;
   font-size: 14px; font-weight: 800;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.2s, opacity 0.15s;
-  position: relative; overflow: hidden;
-  margin-top: 6px;
+  letter-spacing: .3px; cursor: pointer;
+  transition: transform .14s, box-shadow .2s, opacity .14s;
+  margin-top: 4px;
+  -webkit-tap-highlight-color: transparent;
 }
 .btn:hover:not(:disabled) { transform: translateY(-2px); }
-.btn:active { transform: translateY(0); }
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: white;
-  box-shadow: 0 6px 24px rgba(79,119,247,0.35);
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: .6; cursor: not-allowed; }
+.btn-blue {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  color: #fff;
+  box-shadow: 0 5px 22px rgba(79,119,247,.32);
 }
-.btn-success {
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
-  box-shadow: 0 6px 24px rgba(16,185,129,0.3);
+.btn-green {
+  background: linear-gradient(135deg, #0ea470 0%, #059660 100%);
+  color: #fff;
+  box-shadow: 0 5px 22px rgba(14,164,112,.28);
 }
-.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
-
-.btn .spinner {
-  display: none; width: 16px; height: 16px;
-  border: 2px solid rgba(255,255,255,0.3);
-  border-top-color: white; border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  margin: 0 auto;
+.spin {
+  display: none; width: 15px; height: 15px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff; border-radius: 50%;
+  animation: rot .65s linear infinite; margin: 0 auto;
 }
-.btn.loading .btn-text { display: none; }
-.btn.loading .spinner { display: block; }
-@keyframes spin { to { transform: rotate(360deg); } }
+.btn.ld .bt { display: none; }
+.btn.ld .spin { display: block; }
+@keyframes rot { to { transform: rotate(360deg); } }
 
-/* Panels */
-.panel { display: none; animation: fadeUp 0.3s ease both; }
-.panel.active { display: block; }
+/* ======= DIVIDER ======= */
+.divider {
+  display: flex; align-items: center; gap: 10px;
+  margin: 20px 0 16px; color: var(--muted); font-size: 11px; font-weight: 600;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--divider);
+}
 
-/* Toast */
+/* ======= CONTACT BOX ======= */
+.contact-box {
+  background: var(--contact-bg);
+  border: 1.5px solid var(--contact-border);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.contact-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 5px;
+}
+.contact-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--divider);
+  text-decoration: none; color: inherit;
+  transition: color .2s;
+  cursor: pointer;
+}
+.contact-row:last-child { border-bottom: none; padding-bottom: 0; }
+.contact-row:first-of-type { padding-top: 0; }
+.contact-row:hover .cname { color: var(--accent); }
+.cicon {
+  width: 32px; height: 32px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+.cicon.gmail { background: #fff0f0; }
+.cicon.fb    { background: #edf3ff; }
+[data-theme="dark"] .cicon.gmail { background: rgba(229,57,53,.15); }
+[data-theme="dark"] .cicon.fb    { background: rgba(24,119,242,.15); }
+.cinfo { flex: 1; min-width: 0; }
+.clabel { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: .5px; }
+.cname {
+  font-size: 13px; font-weight: 700; color: var(--text2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: color .2s;
+}
+.carrow { color: var(--muted); flex-shrink: 0; }
+.carrow svg { width: 13px; height: 13px; }
+
+/* ======= PANEL ======= */
+.panel { display: none; animation: fadeUp .28s ease both; }
+.panel.on { display: block; }
+
+/* ======= TOAST ======= */
 #toast {
-  position: fixed; top: 24px; right: 24px;
-  padding: 12px 18px; border-radius: 12px;
-  font-size: 13px; font-weight: 600;
-  display: none; z-index: 200;
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-  animation: slideIn 0.3s ease;
-  max-width: 290px;
-  backdrop-filter: blur(10px);
+  position: fixed; bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  padding: 11px 20px; border-radius: 50px;
+  font-size: 13px; font-weight: 700;
+  display: none; z-index: 999;
+  white-space: nowrap;
+  box-shadow: 0 6px 28px rgba(0,0,0,.18);
+  animation: popUp .3s cubic-bezier(.34,1.56,.64,1) both;
 }
 
-@keyframes slideIn {
-  from { transform: translateX(20px); opacity: 0; }
-  to   { transform: translateX(0); opacity: 1; }
-}
+/* ======= ANIMATIONS ======= */
 @keyframes fadeUp {
-  from { transform: translateY(20px); opacity: 0; }
+  from { transform: translateY(18px); opacity: 0; }
   to   { transform: translateY(0); opacity: 1; }
 }
 @keyframes fadeDown {
-  from { transform: translateY(-12px); opacity: 0; }
+  from { transform: translateY(-10px); opacity: 0; }
   to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes popUp {
+  from { transform: translateX(-50%) scale(.8); opacity: 0; }
+  to   { transform: translateX(-50%) scale(1); opacity: 1; }
+}
+
+/* ======= MOBILE ======= */
+@media (max-width: 460px) {
+  html { font-size: 14px; }
+  .card { padding: 22px 18px 20px; border-radius: 20px; }
+  .logo-img { width: 60px; height: 60px; }
+  .logo-title { font-size: 15px; }
+  .theme-btn .tlabel { display: none; }
 }
 </style>
 </head>
 <body>
 
-<div class="bg-ambient">
+<div class="bg-wrap">
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
 </div>
 <div class="bg-dots"></div>
 
-<!-- Theme Toggle -->
-<div class="theme-toggle" onclick="toggleTheme()" title="Chuyển giao diện">
-  <span id="themeIcon">🌙</span>
-  <div class="toggle-track"><div class="toggle-thumb"></div></div>
-  <span id="themeLabel">Tối</span>
-</div>
+<!-- Theme toggle -->
+<button class="theme-btn" onclick="toggleTheme()" aria-label="Chuyển giao diện">
+  <span id="tIcon">🌙</span>
+  <div class="track"><div class="thumb"></div></div>
+  <span class="tlabel" id="tLabel">Tối</span>
+</button>
 
 <div class="wrapper">
   <!-- Logo -->
   <div class="logo">
-    <img class="logo-img" src="data:image/jpeg;base64,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" alt="Logo">
-    <div class="logo-name">🔐 <span>BIO VIP</span> ACCOUNT</div>
+    <img class="logo-img" src="data:image/jpeg;base64,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" alt="BIO VIP Logo">
+    <div class="logo-title">🔐 <span>BIO VIP</span> ACCOUNT</div>
     <div class="logo-sub">Hệ thống xác thực cao cấp</div>
   </div>
 
+  <!-- Card -->
   <div class="card">
-    <!-- Tab switcher -->
+    <!-- Tabs -->
     <div class="tabs">
-      <button class="tab-btn active" id="tab-login" onclick="showLogin()">Đăng nhập</button>
-      <button class="tab-btn" id="tab-register" onclick="showRegister()">Đăng ký</button>
+      <button class="tab on" id="t-login" onclick="showLogin()">Đăng nhập</button>
+      <button class="tab" id="t-reg"   onclick="showRegister()">Đăng ký</button>
     </div>
 
-    <!-- LOGIN -->
-    <div class="panel active" id="loginPanel">
-      <div class="card-title">Chào mừng trở lại 👋</div>
-      <div class="card-subtitle">Đăng nhập để truy cập tài khoản của bạn</div>
+    <!-- LOGIN panel -->
+    <div class="panel on" id="pLogin">
+      <div class="phead">
+        <h2>Chào mừng trở lại 👋</h2>
+        <p>Đăng nhập để truy cập tài khoản VIP</p>
+      </div>
 
       <div class="field">
         <label>Email / Username</label>
-        <div class="input-wrap">
-          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
-          <input id="l_email" type="text" placeholder="email@example.com">
+        <div class="iw">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+          <input id="l_email" type="email" placeholder="email@example.com" autocomplete="email">
         </div>
       </div>
 
       <div class="field">
         <label>Mật khẩu</label>
-        <div class="input-wrap">
-          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-          <input id="l_pass" type="password" placeholder="••••••••">
+        <div class="iw">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <input id="l_pass" type="password" placeholder="••••••••" autocomplete="current-password">
         </div>
       </div>
 
-      <button class="btn btn-primary" id="loginBtn" onclick="login()">
-        <span class="btn-text">Đăng nhập</span>
-        <span class="spinner"></span>
+      <button class="btn btn-blue" id="btnLogin" onclick="login()">
+        <span class="bt">Đăng nhập</span><span class="spin"></span>
       </button>
+
+      <!-- Divider + Contact -->
+      <div class="divider">Liên hệ Admin</div>
+      <div class="contact-box">
+        <div class="contact-title">📞 Hỗ trợ tài khoản</div>
+        <a class="contact-row" href="mailto:bioverify@googlegroups.com">
+          <div class="cicon gmail">📧</div>
+          <div class="cinfo">
+            <div class="clabel">Gmail</div>
+            <div class="cname">bioverify@googlegroups.com</div>
+          </div>
+          <span class="carrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></span>
+        </a>
+        <a class="contact-row" href="https://www.facebook.com/congthanh.bio/" target="_blank" rel="noopener">
+          <div class="cicon fb">🇫</div>
+          <div class="cinfo">
+            <div class="clabel">Facebook</div>
+            <div class="cname">fb.com/congthanh.bio</div>
+          </div>
+          <span class="carrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></span>
+        </a>
+      </div>
     </div>
 
-    <!-- REGISTER -->
-    <div class="panel" id="registerPanel">
-      <div class="card-title">Tạo tài khoản mới ✨</div>
-      <div class="card-subtitle">Điền thông tin để bắt đầu trải nghiệm</div>
+    <!-- REGISTER panel -->
+    <div class="panel" id="pReg">
+      <div class="phead">
+        <h2>Tạo tài khoản mới ✨</h2>
+        <p>Điền thông tin để bắt đầu trải nghiệm</p>
+      </div>
 
       <div class="field">
         <label>Họ và tên</label>
-        <div class="input-wrap">
-          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-          <input id="name" type="text" placeholder="Nguyễn Văn A">
+        <div class="iw">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          <input id="name" type="text" placeholder="Nguyễn Văn A" autocomplete="name">
         </div>
       </div>
 
       <div class="field">
         <label>Email / Username</label>
-        <div class="input-wrap">
-          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
-          <input id="email" type="text" placeholder="email@example.com">
+        <div class="iw">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+          <input id="email" type="email" placeholder="email@example.com" autocomplete="email">
         </div>
       </div>
 
       <div class="field">
         <label>Mật khẩu</label>
-        <div class="input-wrap">
-          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-          <input id="pass" type="password" placeholder="••••••••">
+        <div class="iw">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <input id="pass" type="password" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password">
         </div>
       </div>
 
-      <button class="btn btn-success" id="registerBtn" onclick="register()">
-        <span class="btn-text">Tạo tài khoản</span>
-        <span class="spinner"></span>
+      <button class="btn btn-green" id="btnReg" onclick="register()">
+        <span class="bt">Tạo tài khoản</span><span class="spin"></span>
       </button>
-    </div>
 
+      <div class="divider">Liên hệ Admin</div>
+      <div class="contact-box">
+        <div class="contact-title">📞 Hỗ trợ tài khoản</div>
+        <a class="contact-row" href="mailto:bioverify@googlegroups.com">
+          <div class="cicon gmail">📧</div>
+          <div class="cinfo">
+            <div class="clabel">Gmail</div>
+            <div class="cname">bioverify@googlegroups.com</div>
+          </div>
+          <span class="carrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></span>
+        </a>
+        <a class="contact-row" href="https://www.facebook.com/congthanh.bio/" target="_blank" rel="noopener">
+          <div class="cicon fb">🇫</div>
+          <div class="cinfo">
+            <div class="clabel">Facebook</div>
+            <div class="cname">fb.com/congthanh.bio</div>
+          </div>
+          <span class="carrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></span>
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -414,7 +504,7 @@ input:focus {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-const firebaseConfig = {
+const cfg = {
   apiKey: "AIzaSyA-G3BfucCstuMlQDKDsQVu3daQ854tuCQ",
   authDomain: "csdl-login.firebaseapp.com",
   databaseURL: "https://csdl-login-default-rtdb.firebaseio.com/",
@@ -423,131 +513,100 @@ const firebaseConfig = {
   messagingSenderId: "1036020118468",
   appId: "1:1036020118468:web:8b25fa3cae3d2ee9986a91"
 };
+const db = getDatabase(initializeApp(cfg));
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// ---- Theme ----
+/* ---- Theme ---- */
+const applyTheme = t => {
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('tIcon').textContent  = t==='dark' ? '☀️' : '🌙';
+  document.getElementById('tLabel').textContent = t==='dark' ? 'Sáng' : 'Tối';
+};
+const saved = localStorage.getItem('bva-theme') || 'light';
+applyTheme(saved);
 window.toggleTheme = () => {
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  document.getElementById('themeIcon').textContent = isDark ? '🌙' : '☀️';
-  document.getElementById('themeLabel').textContent = isDark ? 'Tối' : 'Sáng';
-  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  const next = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+  applyTheme(next);
+  localStorage.setItem('bva-theme', next);
 };
 
-// Restore saved theme (default: light)
-const saved = localStorage.getItem('theme') || 'light';
-document.documentElement.setAttribute('data-theme', saved);
-document.getElementById('themeIcon').textContent = saved === 'dark' ? '☀️' : '🌙';
-document.getElementById('themeLabel').textContent = saved === 'dark' ? 'Sáng' : 'Tối';
-
-// ---- Toast ----
-function toast(msg, type = "success") {
-  const t = document.getElementById("toast");
-  const cfg = {
-    success: { icon: "✅", bg: "rgba(16,185,129,0.92)", border: "rgba(16,185,129,0.4)" },
-    error:   { icon: "❌", bg: "rgba(239,68,68,0.92)",  border: "rgba(239,68,68,0.4)"  },
-    info:    { icon: "ℹ️",  bg: "rgba(79,119,247,0.92)", border: "rgba(79,119,247,0.4)" }
+/* ---- Toast ---- */
+let toastTimer;
+function toast(msg, type='ok') {
+  const el = document.getElementById('toast');
+  const styles = {
+    ok:   'background:#0ea470;color:#fff;',
+    err:  'background:#e53e3e;color:#fff;',
+    info: 'background:#4f77f7;color:#fff;'
   };
-  const c = cfg[type];
-  t.innerHTML = `${c.icon} ${msg}`;
-  t.style.cssText = `display:block; background:${c.bg}; border-color:${c.border}; color:#fff;`;
-  clearTimeout(t._t);
-  t._t = setTimeout(() => t.style.display = "none", 3000);
+  el.textContent = msg;
+  el.style.cssText = styles[type] + 'display:block;';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.style.display='none', 3200);
 }
 
-// ---- Loading ----
-function setLoading(btn, state) {
-  btn.classList.toggle("loading", state);
-  btn.disabled = state;
-}
+/* ---- Loading ---- */
+const ld = (btn,on) => { btn.classList.toggle('ld',on); btn.disabled=on; };
 
-// ---- Tab switch ----
+/* ---- Panels ---- */
 window.showLogin = () => {
-  document.getElementById("loginPanel").classList.add("active");
-  document.getElementById("registerPanel").classList.remove("active");
-  document.getElementById("tab-login").classList.add("active");
-  document.getElementById("tab-register").classList.remove("active");
+  document.getElementById('pLogin').classList.add('on');
+  document.getElementById('pReg').classList.remove('on');
+  document.getElementById('t-login').classList.add('on');
+  document.getElementById('t-reg').classList.remove('on');
 };
-
 window.showRegister = () => {
-  document.getElementById("registerPanel").classList.add("active");
-  document.getElementById("loginPanel").classList.remove("active");
-  document.getElementById("tab-register").classList.add("active");
-  document.getElementById("tab-login").classList.remove("active");
+  document.getElementById('pReg').classList.add('on');
+  document.getElementById('pLogin').classList.remove('on');
+  document.getElementById('t-reg').classList.add('on');
+  document.getElementById('t-login').classList.remove('on');
 };
 
-// ---- Register ----
+/* ---- Register ---- */
 window.register = async () => {
-  const name  = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const pass  = document.getElementById("pass").value;
-  const btn   = document.getElementById("registerBtn");
-
-  if (!name || !email || !pass) { toast("Vui lòng điền đầy đủ thông tin", "error"); return; }
-  if (pass.length < 6) { toast("Mật khẩu phải có ít nhất 6 ký tự", "error"); return; }
-
-  setLoading(btn, true);
+  const name  = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const pass  = document.getElementById('pass').value;
+  const btn   = document.getElementById('btnReg');
+  if (!name||!email||!pass) { toast('Vui lòng điền đầy đủ thông tin','err'); return; }
+  if (pass.length < 6)      { toast('Mật khẩu tối thiểu 6 ký tự','err'); return; }
+  ld(btn,true);
   try {
-    // Check email trùng
-    const snap = await get(ref(db, "users"));
+    const snap = await get(ref(db,'users'));
     if (snap.exists()) {
-      let duplicate = false;
-      snap.forEach(c => { if (c.val().email === email) duplicate = true; });
-      if (duplicate) { toast("Email này đã được đăng ký!", "error"); return; }
+      let dup=false;
+      snap.forEach(c=>{ if(c.val().email===email) dup=true; });
+      if (dup) { toast('Email này đã được đăng ký!','err'); return; }
     }
-    await set(ref(db, "users/" + Date.now()), { name, email, password: pass, role: "user" });
-    toast("Đăng ký thành công! Hãy đăng nhập 🎉", "success");
-    document.getElementById("name").value = "";
-    document.getElementById("email").value = "";
-    document.getElementById("pass").value = "";
-    setTimeout(showLogin, 1800);
-  } catch(e) {
-    toast("Lỗi kết nối, thử lại sau", "error");
-  } finally {
-    setLoading(btn, false);
-  }
+    await set(ref(db,'users/'+Date.now()), {name,email,password:pass,role:'user'});
+    toast('Đăng ký thành công! 🎉','ok');
+    ['name','email','pass'].forEach(id=>document.getElementById(id).value='');
+    setTimeout(showLogin,1600);
+  } catch { toast('Lỗi kết nối, thử lại sau','err'); }
+  finally  { ld(btn,false); }
 };
 
-// ---- Login ----
+/* ---- Login ---- */
 window.login = async () => {
-  const email = document.getElementById("l_email").value.trim();
-  const pass  = document.getElementById("l_pass").value;
-  const btn   = document.getElementById("loginBtn");
-
-  if (!email || !pass) { toast("Vui lòng nhập đầy đủ thông tin", "error"); return; }
-
-  setLoading(btn, true);
+  const email = document.getElementById('l_email').value.trim();
+  const pass  = document.getElementById('l_pass').value;
+  const btn   = document.getElementById('btnLogin');
+  if (!email||!pass) { toast('Vui lòng nhập đầy đủ thông tin','err'); return; }
+  ld(btn,true);
   try {
-    const snap = await get(ref(db, "users"));
-    if (!snap.exists()) { toast("Chưa có tài khoản nào", "error"); return; }
-
-    let found = false;
-    snap.forEach(child => {
-      const u = child.val();
-      if (u.email === email && u.password === pass) found = true;
-    });
-
-    if (found) {
-      toast("Đăng nhập thành công! 🎉", "success");
-      setTimeout(() => window.location.href = "HTML.vn", 1500);
-    } else {
-      toast("Email hoặc mật khẩu không đúng", "error");
-    }
-  } catch(e) {
-    toast("Lỗi kết nối, thử lại sau", "error");
-  } finally {
-    setLoading(btn, false);
-  }
+    const snap = await get(ref(db,'users'));
+    if (!snap.exists()) { toast('Chưa có tài khoản nào','err'); return; }
+    let ok=false;
+    snap.forEach(c=>{ const u=c.val(); if(u.email===email&&u.password===pass) ok=true; });
+    if (ok) { toast('Đăng nhập thành công! 🎉','ok'); setTimeout(()=>location.href='HTML.vn',1400); }
+    else    { toast('Email hoặc mật khẩu không đúng','err'); }
+  } catch { toast('Lỗi kết nối, thử lại sau','err'); }
+  finally  { ld(btn,false); }
 };
 
-// Enter key
-document.addEventListener("keydown", e => {
-  if (e.key !== "Enter") return;
-  if (document.getElementById("loginPanel").classList.contains("active")) window.login();
-  else window.register();
+/* ---- Enter key ---- */
+document.addEventListener('keydown', e => {
+  if (e.key!=='Enter') return;
+  document.getElementById('pLogin').classList.contains('on') ? window.login() : window.register();
 });
 </script>
 </body>

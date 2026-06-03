@@ -12,8 +12,8 @@
   --input-bg:#f5f7ff;--accent:#4f77f7;--accent2:#7b5cf5;--success:#0ea470;--danger:#e53e3e;
   --warning:#d97706;--shadow:0 8px 40px rgba(79,119,247,.13);--shadow-sm:0 2px 12px rgba(79,119,247,.08);
   --tab-active:#fff;--divider:#e4e8f5;--surface:#f0f4ff;--row-hover:rgba(79,119,247,.04);
-  --locked-bg:rgba(229,62,62,.05);--orb1:rgba(79,119,247,.10);--orb2:rgba(123,92,245,.08);
-  --orb3:rgba(14,164,112,.06);--toggle-bg:#dde3f7;
+  --locked-bg:rgba(229,62,62,.05);--pending-bg:rgba(217,119,6,.05);
+  --orb1:rgba(79,119,247,.10);--orb2:rgba(123,92,245,.08);--orb3:rgba(14,164,112,.06);--toggle-bg:#dde3f7;
 }
 [data-theme="dark"]{
   --bg:#0c1022;--card:#131929;--border:rgba(255,255,255,.07);--text:#e4eaf8;--text2:#9aa5c4;
@@ -21,6 +21,7 @@
   --danger:#f56565;--warning:#f6ad55;--shadow:0 16px 60px rgba(0,0,0,.5);
   --shadow-sm:0 4px 20px rgba(0,0,0,.3);--tab-active:#1e2a45;--divider:rgba(255,255,255,.06);
   --surface:#0a1020;--row-hover:rgba(79,119,247,.06);--locked-bg:rgba(245,101,101,.07);
+  --pending-bg:rgba(246,173,85,.07);
   --orb1:rgba(91,138,248,.15);--orb2:rgba(139,111,255,.12);--orb3:rgba(34,211,165,.08);--toggle-bg:#1e2a45;
 }
 html{font-size:15px;scroll-behavior:smooth}
@@ -79,6 +80,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .result-progress-bar{height:100%;width:0;border-radius:2px;transition:width linear}
 .result-progress-bar.green{background:linear-gradient(90deg,#0ea470,#22d3a5)}
 .result-progress-bar.blue{background:linear-gradient(90deg,#4f77f7,#7b5cf5)}
+.result-progress-bar.orange{background:linear-gradient(90deg,#d97706,#f6ad55)}
 
 /* LOGIN */
 #loginApp{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:72px 12px 48px;min-height:100vh;position:relative;z-index:10}
@@ -103,6 +105,14 @@ input{width:100%;padding:11px 12px 11px 40px;background:var(--input-bg);border:1
 input::placeholder{color:var(--muted);font-weight:400}
 input:focus{border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(79,119,247,.12)}
 .iw:focus-within .ico{color:var(--accent)}
+
+/* Request admin role checkbox */
+.req-admin-wrap{display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(217,119,6,.07);border:1.5px solid rgba(217,119,6,.2);border-radius:11px;margin-bottom:14px;cursor:pointer;transition:all .2s}
+.req-admin-wrap:hover{border-color:rgba(217,119,6,.4)}
+.req-admin-wrap input[type=checkbox]{width:auto;padding:0;background:transparent;border:none;box-shadow:none;width:16px;height:16px;cursor:pointer;accent-color:var(--warning)}
+.req-admin-wrap label{font-size:12.5px;font-weight:700;color:var(--warning);cursor:pointer;flex:1}
+.req-admin-wrap .req-sub{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
+
 .btn{width:100%;padding:12.5px;border:none;border-radius:12px;font-family:'Be Vietnam Pro',sans-serif;font-size:14px;font-weight:800;letter-spacing:.3px;cursor:pointer;transition:transform .14s,box-shadow .2s,opacity .14s;margin-top:4px;-webkit-tap-highlight-color:transparent}
 .btn:hover:not(:disabled){transform:translateY(-2px)}
 .btn:active:not(:disabled){transform:translateY(0)}
@@ -149,7 +159,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(79,119,247,.1
 .btn-logout{padding:8px 16px;border-radius:9px;background:rgba(229,62,62,.1);border:1px solid rgba(229,62,62,.25);color:var(--danger);font-family:'Be Vietnam Pro',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
 .btn-logout:hover{background:rgba(229,62,62,.2)}
 .adm-content{padding:28px;max-width:1200px;margin:0 auto;position:relative;z-index:10}
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px}
 .stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:20px;display:flex;align-items:center;gap:14px;transition:border-color .2s,transform .2s}
 .stat-card:hover{border-color:rgba(79,119,247,.3);transform:translateY(-2px)}
 .stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
@@ -157,8 +167,31 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(79,119,247,.1
 .stat-icon.green{background:rgba(14,164,112,.1)}
 .stat-icon.red{background:rgba(229,62,62,.1)}
 .stat-icon.purple{background:rgba(123,92,245,.1)}
+.stat-icon.orange{background:rgba(217,119,6,.1)}
 .stat-val{font-size:26px;font-weight:800;line-height:1}
 .stat-lbl{font-size:11px;color:var(--text2);font-weight:600;letter-spacing:.5px;margin-top:3px}
+
+/* PENDING ADMIN SECTION */
+.pending-section{background:var(--card);border:1.5px solid rgba(217,119,6,.3);border-radius:20px;overflow:hidden;margin-bottom:24px}
+.pending-head{padding:16px 24px;background:rgba(217,119,6,.06);border-bottom:1px solid rgba(217,119,6,.15);display:flex;align-items:center;gap:10px}
+.pending-head h2{font-size:15px;font-weight:800;color:var(--warning);flex:1}
+.pending-badge{background:rgba(217,119,6,.15);border:1px solid rgba(217,119,6,.3);color:var(--warning);font-size:11px;font-weight:800;padding:3px 10px;border-radius:50px}
+.pending-empty{padding:28px;text-align:center;color:var(--muted);font-size:13px;font-weight:600}
+.pending-list{padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+.pending-item{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;transition:border-color .2s}
+.pending-item:hover{border-color:rgba(217,119,6,.3)}
+.pending-avatar{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,rgba(217,119,6,.2),rgba(246,173,85,.2));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.pending-info{flex:1;min-width:120px}
+.pending-name{font-size:14px;font-weight:700;color:var(--text)}
+.pending-email{font-size:12px;color:var(--text2);margin-top:1px}
+.pending-username{font-size:11px;font-family:monospace;color:var(--warning);margin-top:2px}
+.pending-time{font-size:10.5px;color:var(--muted);margin-top:2px}
+.pending-actions{display:flex;gap:8px}
+.btn-approve{padding:8px 16px;border-radius:9px;background:linear-gradient(135deg,#0ea470,#059660);border:none;color:#fff;font-family:'Be Vietnam Pro',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px}
+.btn-approve:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(14,164,112,.3)}
+.btn-reject{padding:8px 14px;border-radius:9px;background:rgba(229,62,62,.1);border:1px solid rgba(229,62,62,.25);color:var(--danger);font-family:'Be Vietnam Pro',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all .2s}
+.btn-reject:hover{background:rgba(229,62,62,.2)}
+
 .panel-card{background:var(--card);border:1.5px solid var(--border);border-radius:20px;overflow:hidden}
 .panel-head{padding:20px 24px;border-bottom:1px solid var(--divider);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .panel-head h2{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px}
@@ -176,6 +209,7 @@ tbody tr{border-bottom:1px solid var(--divider);transition:background .15s}
 tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:var(--row-hover)}
 tbody tr.locked-row{background:var(--locked-bg)}
+tbody tr.pending-row{background:var(--pending-bg)}
 td{padding:14px 20px;font-size:13px;vertical-align:middle}
 td .uid{font-size:10px;color:var(--muted);font-family:monospace}
 td .uname{font-weight:700;color:var(--text);margin-bottom:1px}
@@ -185,6 +219,7 @@ td .uemail{font-size:12px;color:var(--text2)}
 .badge-locked{background:rgba(229,62,62,.1);color:var(--danger);border:1px solid rgba(229,62,62,.25)}
 .badge-admin{background:rgba(79,119,247,.1);color:var(--accent);border:1px solid rgba(79,119,247,.25)}
 .badge-user{background:rgba(123,92,245,.08);color:var(--accent2);border:1px solid rgba(123,92,245,.2)}
+.badge-pending{background:rgba(217,119,6,.1);color:var(--warning);border:1px solid rgba(217,119,6,.25)}
 .actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .act-btn{padding:6px 12px;border-radius:8px;font-family:'Be Vietnam Pro',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:1px solid;transition:all .18s;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
 .act-lock{background:rgba(229,62,62,.1);border-color:rgba(229,62,62,.3);color:var(--danger)}
@@ -193,9 +228,12 @@ td .uemail{font-size:12px;color:var(--text2)}
 .act-unlock:hover{background:rgba(14,164,112,.2)}
 .act-reset{background:rgba(217,119,6,.1);border-color:rgba(217,119,6,.3);color:var(--warning)}
 .act-reset:hover{background:rgba(217,119,6,.2)}
-/* ── NEW: rename button ── */
 .act-rename{background:rgba(79,119,247,.08);border-color:rgba(79,119,247,.3);color:var(--accent)}
 .act-rename:hover{background:rgba(79,119,247,.18)}
+.act-approve{background:rgba(14,164,112,.1);border-color:rgba(14,164,112,.3);color:var(--success)}
+.act-approve:hover{background:rgba(14,164,112,.2)}
+.act-reject{background:rgba(229,62,62,.1);border-color:rgba(229,62,62,.3);color:var(--danger)}
+.act-reject:hover{background:rgba(229,62,62,.2)}
 
 .inline-form{display:none;margin-top:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;animation:fade-up .2s ease both}
 .inline-form.open{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -213,8 +251,6 @@ td .uemail{font-size:12px;color:var(--text2)}
 .empty-state p{font-size:14px;font-weight:600}
 .tbl-loading{padding:50px 20px;text-align:center;color:var(--muted);font-size:13px;font-weight:600}
 .spinner{width:28px;height:28px;margin:0 auto 12px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:rot .7s linear infinite}
-
-/* ── SECURITY NOTICE BANNER ── */
 .sec-notice{background:rgba(14,164,112,.08);border:1.5px solid rgba(14,164,112,.25);border-radius:14px;padding:14px 18px;margin-bottom:24px;display:flex;align-items:flex-start;gap:12px;font-size:12.5px;color:var(--text2);line-height:1.6}
 .sec-notice .sec-icon{font-size:20px;flex-shrink:0;margin-top:1px}
 .sec-notice strong{color:var(--success);display:block;margin-bottom:3px;font-size:13px}
@@ -245,6 +281,7 @@ td .uemail{font-size:12px;color:var(--text2)}
   .btn{padding:14px;font-size:15px}input{font-size:16px}.adm-content{padding:16px}.topbar{padding:0 16px}
   .admin-info{display:none}.stats-row{grid-template-columns:1fr 1fr}th,td{padding:10px 12px}
   .btn-logout span{display:none}.btn-logout{padding:8px 10px}.search-wrap input{width:160px}
+  .pending-item{flex-direction:column;align-items:flex-start}
 }
 </style>
 </head>
@@ -296,7 +333,8 @@ td .uemail{font-size:12px;color:var(--text2)}
         <button class="tab on" id="t-login" onclick="showLogin()">Đăng nhập</button>
         <button class="tab" id="t-reg" onclick="showRegister()">Đăng ký</button>
       </div>
-      <!-- LOGIN -->
+
+      <!-- LOGIN PANEL -->
       <div class="panel on" id="pLogin">
         <div class="phead"><h2>Chào mừng trở lại 👋</h2><p>Đăng nhập bằng username hoặc email</p></div>
         <div class="field">
@@ -332,7 +370,8 @@ td .uemail{font-size:12px;color:var(--text2)}
           </a>
         </div>
       </div>
-      <!-- REGISTER -->
+
+      <!-- REGISTER PANEL -->
       <div class="panel" id="pReg">
         <div class="phead"><h2>Tạo tài khoản mới ✨</h2><p>Điền thông tin để bắt đầu trải nghiệm</p></div>
         <div class="field">
@@ -361,6 +400,14 @@ td .uemail{font-size:12px;color:var(--text2)}
           <div class="iw">
             <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
             <input id="r_pass" type="password" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password">
+          </div>
+        </div>
+        <!-- Request Admin Role -->
+        <div class="req-admin-wrap" onclick="toggleAdminReq()">
+          <input type="checkbox" id="reqAdminCheck" onclick="event.stopPropagation();toggleAdminReq()">
+          <div>
+            <label for="reqAdminCheck">👑 Yêu cầu quyền Admin</label>
+            <div class="req-sub">Cần được duyệt bởi Admin gốc</div>
           </div>
         </div>
         <div id="regError" style="display:none;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.25);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12.5px;color:var(--danger);font-weight:600;text-align:center"></div>
@@ -406,20 +453,33 @@ td .uemail{font-size:12px;color:var(--text2)}
     </div>
   </div>
   <div class="adm-content">
-    <!-- Security notice -->
     <div class="sec-notice">
       <span class="sec-icon">🔒</span>
       <div>
-        <strong>Bảo mật đã được cải thiện (v3)</strong>
-        Xác minh quyền admin qua DB role · Reset MK qua Firebase Auth Email · Đăng nhập bằng username hoặc email · Index username tại /usernames/ đảm bảo tính duy nhất.
+        <strong>Bảo mật đã được cải thiện (v4)</strong>
+        Tài khoản yêu cầu quyền Admin cần được Admin gốc duyệt · Role gán qua DB không thể tự set · Reset MK qua Firebase Auth Email · Username index duy nhất.
       </div>
     </div>
+
+    <!-- STATS -->
     <div class="stats-row">
       <div class="stat-card"><div class="stat-icon blue">👥</div><div><div class="stat-val" id="sTotalUsers">—</div><div class="stat-lbl">Tổng tài khoản</div></div></div>
       <div class="stat-card"><div class="stat-icon green">✅</div><div><div class="stat-val" id="sActiveUsers">—</div><div class="stat-lbl">Đang hoạt động</div></div></div>
       <div class="stat-card"><div class="stat-icon red">🔒</div><div><div class="stat-val" id="sLockedUsers">—</div><div class="stat-lbl">Đã khóa</div></div></div>
       <div class="stat-card"><div class="stat-icon purple">👑</div><div><div class="stat-val" id="sAdminUsers">—</div><div class="stat-lbl">Quản trị viên</div></div></div>
+      <div class="stat-card"><div class="stat-icon orange">⏳</div><div><div class="stat-val" id="sPendingUsers">—</div><div class="stat-lbl">Chờ duyệt Admin</div></div></div>
     </div>
+
+    <!-- PENDING ADMIN REQUESTS -->
+    <div class="pending-section" id="pendingSection" style="display:none">
+      <div class="pending-head">
+        <h2>⏳ Yêu cầu quyền Admin chờ duyệt</h2>
+        <span class="pending-badge" id="pendingCount">0</span>
+      </div>
+      <div id="pendingList" class="pending-list"></div>
+    </div>
+
+    <!-- USER TABLE -->
     <div class="panel-card">
       <div class="panel-head">
         <h2>📋 Danh sách tài khoản <span class="ph-sub" id="userCount"></span></h2>
@@ -462,7 +522,6 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
 import { getDatabase, ref, set, get, update, onValue }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-/* ── Firebase config ── */
 const cfg = {
   apiKey:            "AIzaSyA-G3BfucCstuMlQDKDsQVu3daQ854tuCQ",
   authDomain:        "csdl-login.firebaseapp.com",
@@ -476,7 +535,8 @@ const app  = initializeApp(cfg);
 const auth = getAuth(app);
 const db   = getDatabase(app);
 
-const ADMIN_EMAIL = "bioverify@googlegroups.com";
+const ADMIN_EMAIL   = "bioverify@googlegroups.com";
+const ROOT_ADMIN_UID_KEY = "root_admin_uid"; // stored in /config/root_admin_uid
 
 let allUsers      = [];
 let pendingAction = null;
@@ -541,6 +601,12 @@ window.showRegister=()=>{
 function showError(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block'}
 function hideError(id){document.getElementById(id).style.display='none'}
 
+/* ════════ TOGGLE ADMIN REQUEST ════════ */
+window.toggleAdminReq=()=>{
+  const cb=document.getElementById('reqAdminCheck');
+  cb.checked=!cb.checked;
+};
+
 /* ════════ RESULT OVERLAY ════════ */
 function showResult(icon,title,msg,barColor,duration,cb){
   const ov=document.getElementById('resultOverlay'), bar=document.getElementById('resBar');
@@ -556,44 +622,57 @@ function showResult(icon,title,msg,barColor,duration,cb){
 
 /* ════════ REGISTER ════════ */
 window.register=async()=>{
-  const name    = document.getElementById('r_name').value.trim();
-  const username= document.getElementById('r_username').value.trim().toLowerCase().replace(/[^a-z0-9_\.]/g,'');
-  const email   = document.getElementById('r_email').value.trim();
-  const pass    = document.getElementById('r_pass').value;
-  const btn     = document.getElementById('btnReg');
+  const name     = document.getElementById('r_name').value.trim();
+  const username = document.getElementById('r_username').value.trim().toLowerCase().replace(/[^a-z0-9_\.]/g,'');
+  const email    = document.getElementById('r_email').value.trim();
+  const pass     = document.getElementById('r_pass').value;
+  const reqAdmin = document.getElementById('reqAdminCheck').checked;
+  const btn      = document.getElementById('btnReg');
   hideError('regError');
+
   if(!name||!username||!email||!pass){showError('regError','⚠️ Vui lòng điền đầy đủ thông tin');return}
   if(username.length<3){showError('regError','⚠️ Username phải có ít nhất 3 ký tự');return}
   if(pass.length<6){showError('regError','⚠️ Mật khẩu tối thiểu 6 ký tự');return}
+
+  /* Không cho phép đăng ký trực tiếp với email admin gốc */
+  if(email.toLowerCase()===ADMIN_EMAIL.toLowerCase()){
+    showError('regError','❌ Email này không được phép đăng ký');return;
+  }
+
   ld(btn,true);
   try{
-    /* Check username uniqueness */
     const usnap=await get(ref(db,'usernames/'+username));
     if(usnap.exists()){showError('regError','❌ Username "@'+username+'" đã được sử dụng');return}
+
     const cred=await createUserWithEmailAndPassword(auth,email,pass);
     await updateProfile(cred.user,{displayName:name});
     const uid=cred.user.uid;
-    /* Write user record + username index atomically-ish */
+
+    /* role: nếu reqAdmin → 'pending_admin', ngược lại → 'user' */
+    const role = reqAdmin ? 'pending_admin' : 'user';
+
     await set(ref(db,'users/'+uid),{
-      name, username, email,
-      role: email.toLowerCase()===ADMIN_EMAIL.toLowerCase()?'admin':'user',
+      name, username, email, role,
       locked: false,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      ...(reqAdmin ? {adminRequestAt: Date.now()} : {})
     });
     await set(ref(db,'usernames/'+username),uid);
     await signOut(auth);
-    toast('Đăng ký thành công! 🎉','ok');
-    ['r_name','r_username','r_email','r_pass'].forEach(id=>document.getElementById(id).value='');
-    setTimeout(showLogin,1600);
+
+    if(reqAdmin){
+      showResult('⏳','Yêu cầu đã gửi!','Tài khoản của bạn đang chờ Admin duyệt quyền. Vui lòng đợi xác nhận.','orange',3000,()=>{showLogin()});
+    } else {
+      toast('Đăng ký thành công! 🎉','ok');
+      ['r_name','r_username','r_email','r_pass'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('reqAdminCheck').checked=false;
+      setTimeout(showLogin,1600);
+    }
   }catch(e){showError('regError','❌ '+firebaseErrVi(e.code));}
   finally{ld(btn,false)}
 };
 
-/* ════════ LOGIN — username OR email ════════
-   If input contains "@" → treat as email directly.
-   Otherwise → lookup /usernames/<input> to resolve the email,
-   then sign in with that email via Firebase Auth.
-═══════════════════════════════════════════ */
+/* ════════ LOGIN ════════ */
 window.login=async()=>{
   const ident=document.getElementById('l_ident').value.trim();
   const pass =document.getElementById('l_pass').value;
@@ -602,13 +681,10 @@ window.login=async()=>{
   if(!ident||!pass){showError('loginError','⚠️ Vui lòng nhập đầy đủ thông tin');return}
   ld(btn,true);
   try{
-    /* Resolve identifier → email */
     let email=ident;
     if(!ident.includes('@')){
       const usnap=await get(ref(db,'usernames/'+ident.toLowerCase()));
-      if(!usnap.exists()){
-        showError('loginError','❌ Username không tồn tại');return;
-      }
+      if(!usnap.exists()){showError('loginError','❌ Username không tồn tại');return;}
       const uid=usnap.val();
       const userSnap=await get(ref(db,'users/'+uid));
       if(!userSnap.exists()){showError('loginError','⚠️ Tài khoản không tồn tại trong hệ thống.');return}
@@ -617,6 +693,28 @@ window.login=async()=>{
     const cred=await signInWithEmailAndPassword(auth,email,pass);
     const uid=cred.user.uid;
     const snap=await get(ref(db,'users/'+uid));
+
+    /* Admin gốc: kiểm tra email trực tiếp */
+    if(email.toLowerCase()===ADMIN_EMAIL.toLowerCase()){
+      /* Tự động tạo/cập nhật record admin gốc trong DB nếu chưa có */
+      const adminSnap = await get(ref(db,'users/'+uid));
+      if(!adminSnap.exists()){
+        await set(ref(db,'users/'+uid),{
+          name:'bioverify', username:'bioverify', email: ADMIN_EMAIL,
+          role:'admin', locked:false, createdAt:Date.now()
+        });
+        await set(ref(db,'usernames/bioverify'),uid);
+      } else if(adminSnap.val().role!=='admin'){
+        await update(ref(db,'users/'+uid),{role:'admin'});
+      }
+      showResult('👑','Xin Chào Quản Trị Viên!','Đang tải trang quản trị...','blue',2000,()=>{
+        document.getElementById('loginApp').style.display='none';
+        document.getElementById('adminApp').style.display='block';
+        loadUsers();
+      });
+      return;
+    }
+
     if(!snap.exists()){
       showError('loginError','⚠️ Tài khoản không tồn tại trong hệ thống.');
       await signOut(auth); return;
@@ -624,6 +722,11 @@ window.login=async()=>{
     const u=snap.val();
     if(u.locked===true){
       showError('loginError','🔒 Tài khoản của bạn đang tạm khóa. Vui lòng liên hệ Admin.');
+      await signOut(auth); return;
+    }
+    /* Tài khoản đang chờ duyệt admin */
+    if(u.role==='pending_admin'){
+      showError('loginError','⏳ Tài khoản của bạn đang chờ Admin duyệt quyền. Vui lòng thử lại sau.');
       await signOut(auth); return;
     }
     if(u.role==='admin'){
@@ -656,27 +759,65 @@ function firebaseErrVi(code){
   return map[code]||('Đã có lỗi xảy ra ('+code+')');
 }
 
-/* ════════ ADMIN — LOAD USERS ════════ */
+/* ════════ LOAD USERS ════════ */
 function loadUsers(){
   onValue(ref(db,'users'),snap=>{
     allUsers=[];
     if(snap.exists()) snap.forEach(c=>{
       const v=c.val();
-      allUsers.push({key:c.key,name:v.name||'—',email:v.email||'—',username:v.username||'—',role:v.role||'user',locked:v.locked===true});
+      allUsers.push({
+        key:c.key, name:v.name||'—', email:v.email||'—',
+        username:v.username||'—', role:v.role||'user',
+        locked:v.locked===true,
+        adminRequestAt: v.adminRequestAt||null
+      });
     });
-    renderUsers(allUsers);
+    renderPendingAdmins(allUsers.filter(u=>u.role==='pending_admin'));
+    renderUsers(allUsers.filter(u=>u.role!=='pending_admin'));
     updateStats(allUsers);
     document.getElementById('tblLoading').style.display='none';
-    document.getElementById('usersTable').style.display=allUsers.length?'table':'none';
+    const nonPending=allUsers.filter(u=>u.role!=='pending_admin');
+    document.getElementById('usersTable').style.display=nonPending.length?'table':'none';
   });
 }
+
 function updateStats(users){
   document.getElementById('sTotalUsers').textContent=users.length;
-  document.getElementById('sActiveUsers').textContent=users.filter(u=>!u.locked).length;
+  document.getElementById('sActiveUsers').textContent=users.filter(u=>!u.locked&&u.role!=='pending_admin').length;
   document.getElementById('sLockedUsers').textContent=users.filter(u=>u.locked).length;
   document.getElementById('sAdminUsers').textContent=users.filter(u=>u.role==='admin').length;
-  document.getElementById('userCount').textContent=`— ${users.length} tài khoản`;
+  document.getElementById('sPendingUsers').textContent=users.filter(u=>u.role==='pending_admin').length;
+  const nonPending=users.filter(u=>u.role!=='pending_admin');
+  document.getElementById('userCount').textContent=`— ${nonPending.length} tài khoản`;
 }
+
+/* ════════ RENDER PENDING ADMIN REQUESTS ════════ */
+function renderPendingAdmins(pending){
+  const section=document.getElementById('pendingSection');
+  const list=document.getElementById('pendingList');
+  const badge=document.getElementById('pendingCount');
+  badge.textContent=pending.length;
+  if(!pending.length){section.style.display='none';return}
+  section.style.display='block';
+  list.innerHTML=pending.map(u=>{
+    const dt=u.adminRequestAt?new Date(u.adminRequestAt).toLocaleString('vi-VN'):'—';
+    return `
+    <div class="pending-item" id="pend-${u.key}">
+      <div class="pending-avatar">👑</div>
+      <div class="pending-info">
+        <div class="pending-name">${esc(u.name)}</div>
+        <div class="pending-email">${esc(u.email)}</div>
+        <div class="pending-username">@${esc(u.username)}</div>
+        <div class="pending-time">📅 Yêu cầu lúc: ${dt}</div>
+      </div>
+      <div class="pending-actions">
+        <button class="btn-approve" onclick="promptApproveAdmin('${u.key}','${esc(u.name)}')">✅ Duyệt</button>
+        <button class="btn-reject"  onclick="promptRejectAdmin('${u.key}','${esc(u.name)}')">❌ Từ chối</button>
+      </div>
+    </div>`}).join('');
+}
+
+/* ════════ RENDER USER TABLE ════════ */
 function renderUsers(users){
   const tbody=document.getElementById('usersTbody');
   const empty=document.getElementById('emptyState');
@@ -700,11 +841,10 @@ function renderUsers(users){
           ${u.locked
             ?`<button class="act-btn act-unlock" onclick="promptUnlock('${u.key}','${esc(u.name)}')">🔓 Mở khóa</button>`
             :`<button class="act-btn act-lock"   onclick="promptLock('${u.key}','${esc(u.name)}')">🔒 Khóa</button>`}
-          <button class="act-btn act-rename" onclick="toggleRenameForm('${u.key}','${esc(u.name)}','${esc(u.username)}')">✏️ Đổi tên / Username</button>
+          <button class="act-btn act-rename" onclick="toggleRenameForm('${u.key}','${esc(u.name)}','${esc(u.username)}')">✏️ Đổi tên</button>
           <button class="act-btn act-reset"  onclick="toggleResetForm('${u.key}')">🔑 Reset MK</button>
         </div>
-
-        <!-- RENAME + USERNAME FORM -->
+        <!-- RENAME FORM -->
         <div class="inline-form rename-form" id="rnf-${u.key}" style="flex-direction:column;align-items:stretch;gap:10px">
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             <input type="text" id="nn-${u.key}" placeholder="Họ và tên mới..." maxlength="60" style="flex:1;min-width:120px">
@@ -716,10 +856,9 @@ function renderUsers(users){
           </div>
           <div id="rnf-err-${u.key}" style="display:none;font-size:11.5px;color:var(--danger);font-weight:600"></div>
         </div>
-
         <!-- RESET PASSWORD FORM -->
         <div class="inline-form reset-form" id="rf-${u.key}">
-          <span style="font-size:12px;color:var(--text2);flex:1">Gửi email đặt lại mật khẩu tới <b>${esc(u.email)}</b>?</span>
+          <span style="font-size:12px;color:var(--text2);flex:1">Gửi email đặt lại MK tới <b>${esc(u.email)}</b>?</span>
           <button class="btn-save orange" onclick="sendResetEmail('${u.key}','${esc(u.email)}','${esc(u.name)}')">📧 Gửi email</button>
           <button class="btn-cancel-form" onclick="toggleResetForm('${u.key}')">✕</button>
         </div>
@@ -730,7 +869,18 @@ function renderUsers(users){
 /* ════════ SEARCH ════════ */
 window.filterUsers=()=>{
   const q=document.getElementById('searchInput').value.trim().toLowerCase();
-  renderUsers(q?allUsers.filter(u=>u.name.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)||u.username.toLowerCase().includes(q)):allUsers);
+  const nonPending=allUsers.filter(u=>u.role!=='pending_admin');
+  renderUsers(q?nonPending.filter(u=>u.name.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)||u.username.toLowerCase().includes(q)):nonPending);
+};
+
+/* ════════ APPROVE / REJECT ADMIN ════════ */
+window.promptApproveAdmin=(key,name)=>{
+  pendingAction={type:'approve_admin',key,name};
+  openModal('👑','Duyệt quyền Admin?',`Tài khoản <b>${name}</b> sẽ được cấp quyền Admin.`,'success','✅ Duyệt ngay');
+};
+window.promptRejectAdmin=(key,name)=>{
+  pendingAction={type:'reject_admin',key,name};
+  openModal('❌','Từ chối yêu cầu?',`Tài khoản <b>${name}</b> sẽ bị hạ xuống User thường.`,'danger','❌ Từ chối');
 };
 
 /* ════════ LOCK / UNLOCK ════════ */
@@ -757,25 +907,18 @@ window.saveName=async(key)=>{
   if(!newName||newName.length<2){errEl.textContent='Tên phải có ít nhất 2 ký tự';errEl.style.display='block';return}
   if(newUsername&&newUsername.length<3){errEl.textContent='Username phải có ít nhất 3 ký tự';errEl.style.display='block';return}
   try{
-    /* If username changed, check uniqueness first */
     if(newUsername){
       const oldUser=allUsers.find(x=>x.key===key);
       if(newUsername!==oldUser?.username){
         const snap=await get(ref(db,'usernames/'+newUsername));
-        if(snap.exists()&&snap.val()!==key){
-          errEl.textContent='Username "@'+newUsername+'" đã được sử dụng';errEl.style.display='block';return;
-        }
-        /* Remove old username index */
-        if(oldUser?.username&&oldUser.username!=='—'){
-          await update(ref(db,'usernames/'+oldUser.username),null);
-        }
-        /* Write new username index */
+        if(snap.exists()&&snap.val()!==key){errEl.textContent='Username "@'+newUsername+'" đã được sử dụng';errEl.style.display='block';return;}
+        if(oldUser?.username&&oldUser.username!=='—') await update(ref(db,'usernames/'+oldUser.username),null);
         await set(ref(db,'usernames/'+newUsername),key);
       }
     }
     await update(ref(db,'users/'+key),{name:newName,...(newUsername?{username:newUsername}:{})});
     document.getElementById('rnf-'+key).classList.remove('open');
-    toast(`✅ Đã cập nhật tài khoản`,'ok');
+    toast('✅ Đã cập nhật tài khoản','ok');
     const u=allUsers.find(x=>x.key===key);
     if(u){u.name=newName;if(newUsername)u.username=newUsername;}
     const nameEl=document.querySelector(`#row-${key} .uname`);
@@ -785,13 +928,8 @@ window.saveName=async(key)=>{
   }catch(e){ toast('Lỗi khi lưu: '+e.message,'err') }
 };
 
-/* ════════ RESET PASSWORD — FIX ════════
-   OLD (broken): wrote plain-text password to DB — didn't change Firebase Auth password.
-   NEW (correct): sends official Firebase password reset email to user's address.
-   The user clicks the link, sets their own new password via Firebase's secure flow.
-═══════════════════════════════════════ */
+/* ════════ RESET PASSWORD ════════ */
 window.toggleResetForm=key=>{
-  /* Close rename form if open */
   const rnf=document.getElementById('rnf-'+key);
   if(rnf) rnf.classList.remove('open');
   document.getElementById('rf-'+key).classList.toggle('open');
@@ -812,6 +950,7 @@ window.executeConfirm=async()=>{
   closeModal();
   if(!pendingAction) return;
   const{type,key,name}=pendingAction; pendingAction=null;
+
   if(type==='logout'){
     await signOut(auth);
     document.getElementById('adminApp').style.display='none';
@@ -819,6 +958,20 @@ window.executeConfirm=async()=>{
     document.getElementById('l_ident').value='';
     document.getElementById('l_pass').value='';
     toast('Đã đăng xuất','info'); return;
+  }
+  if(type==='approve_admin'){
+    try{
+      await update(ref(db,'users/'+key),{role:'admin', adminRequestAt:null, approvedAt:Date.now()});
+      toast(`👑 Đã duyệt quyền Admin cho ${name}`,'ok');
+    }catch{ toast('Lỗi kết nối, thử lại sau','err') }
+    return;
+  }
+  if(type==='reject_admin'){
+    try{
+      await update(ref(db,'users/'+key),{role:'user', adminRequestAt:null, rejectedAt:Date.now()});
+      toast(`❌ Đã từ chối yêu cầu của ${name}`,'warn');
+    }catch{ toast('Lỗi kết nối, thử lại sau','err') }
+    return;
   }
   try{
     if(type==='lock')  { await update(ref(db,'users/'+key),{locked:true});  toast(`🔒 Đã khóa tài khoản ${name}`,'warn'); }

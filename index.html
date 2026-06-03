@@ -517,7 +517,7 @@ td .uemail{font-size:12px;color:var(--text2)}
 <script type="module">
 import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-         updateProfile, sendPasswordResetEmail, signOut }
+         updateProfile, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDatabase, ref, set, get, update, onValue }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -857,10 +857,16 @@ function renderUsers(users){
           <div id="rnf-err-${u.key}" style="display:none;font-size:11.5px;color:var(--danger);font-weight:600"></div>
         </div>
         <!-- RESET PASSWORD FORM -->
-        <div class="inline-form reset-form" id="rf-${u.key}">
-          <span style="font-size:12px;color:var(--text2);flex:1">Gửi email đặt lại MK tới <b>${esc(u.email)}</b>?</span>
-          <button class="btn-save orange" onclick="sendResetEmail('${u.key}','${esc(u.email)}','${esc(u.name)}')">📧 Gửi email</button>
-          <button class="btn-cancel-form" onclick="toggleResetForm('${u.key}')">✕</button>
+        <div class="inline-form reset-form" id="rf-${u.key}" style="flex-direction:column;align-items:stretch;gap:10px">
+          <div style="font-size:12px;color:var(--text2);font-weight:600">🔑 Đặt mật khẩu mới cho <b>${esc(u.name)}</b></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input type="password" id="np-${u.key}" placeholder="Mật khẩu mới (tối thiểu 6 ký tự)..." style="flex:1;min-width:180px">
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-save orange" onclick="saveNewPassword('${u.key}','${esc(u.name)}')">💾 Lưu mật khẩu</button>
+            <button class="btn-cancel-form" onclick="toggleResetForm('${u.key}')">✕ Hủy</button>
+          </div>
+          <div id="rf-err-${u.key}" style="display:none;font-size:11.5px;color:var(--danger);font-weight:600"></div>
         </div>
       </td>
     </tr>`).join('');
@@ -928,18 +934,33 @@ window.saveName=async(key)=>{
   }catch(e){ toast('Lỗi khi lưu: '+e.message,'err') }
 };
 
-/* ════════ RESET PASSWORD ════════ */
+/* ════════ RESET PASSWORD — Admin nhập trực tiếp ════════ */
 window.toggleResetForm=key=>{
   const rnf=document.getElementById('rnf-'+key);
   if(rnf) rnf.classList.remove('open');
-  document.getElementById('rf-'+key).classList.toggle('open');
+  const rf=document.getElementById('rf-'+key);
+  rf.classList.toggle('open');
+  if(rf.classList.contains('open')){
+    const inp=document.getElementById('np-'+key);
+    if(inp){inp.value='';inp.focus();}
+    const err=document.getElementById('rf-err-'+key);
+    if(err) err.style.display='none';
+  }
 };
-window.sendResetEmail=async(key,email,name)=>{
+window.saveNewPass=async(key,name)=>{
+  const inp=document.getElementById('np-'+key);
+  const errEl=document.getElementById('rf-err-'+key);
+  const newPass=inp?inp.value:'';
+  errEl.style.display='none';
+  if(!newPass||newPass.length<6){
+    errEl.textContent='⚠️ Mật khẩu phải có ít nhất 6 ký tự';
+    errEl.style.display='block';return;
+  }
   try{
-    await sendPasswordResetEmail(auth,email);
+    await update(ref(db,'users/'+key),{newPassword: newPass, resetAt: Date.now()});
     document.getElementById('rf-'+key).classList.remove('open');
-    toast(`📧 Đã gửi email đặt lại MK tới ${email}`,'ok');
-  }catch(e){ toast('Không gửi được email: '+firebaseErrVi(e.code),'err') }
+    toast('✅ Đã lưu mật khẩu mới cho '+name,'ok');
+  }catch(e){ toast('Lỗi: '+e.message,'err'); }
 };
 
 /* ════════ LOGOUT ════════ */

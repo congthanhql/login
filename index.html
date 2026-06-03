@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login System</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  :root {
+    --bg: #080c14;
+    --surface: #0d1424;
+    --card: #111827;
+    --border: rgba(255,255,255,0.07);
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --success: #22d3a5;
+    --danger: #f25c6e;
+    --text: #e8edf5;
+    --muted: #6b7a99;
+    --input-bg: #0a1020;
+  }
+ 
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+ 
+  /* Ambient background */
+  .bg-ambient {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.18;
+    animation: drift 12s ease-in-out infinite alternate;
+  }
+  .orb-1 { width: 500px; height: 500px; background: var(--accent); top: -120px; left: -100px; animation-delay: 0s; }
+  .orb-2 { width: 400px; height: 400px; background: var(--accent2); bottom: -80px; right: -80px; animation-delay: -4s; }
+  .orb-3 { width: 250px; height: 250px; background: var(--success); top: 40%; left: 50%; animation-delay: -8s; opacity: 0.10; }
+ 
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(30px, 20px) scale(1.08); }
+  }
+ 
+  /* Grid overlay */
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+ 
+  /* Wrapper */
+  .wrapper {
+    position: relative; z-index: 10;
+    width: 100%; max-width: 420px;
+    padding: 20px;
+  }
+ 
+  /* Logo */
+  .logo {
+    text-align: center;
+    margin-bottom: 32px;
+    animation: fadeDown 0.6s ease both;
+  }
+  .logo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    margin-bottom: 12px;
+    box-shadow: 0 8px 32px rgba(79,142,247,0.3);
+  }
+  .logo-icon svg { width: 26px; height: 26px; }
+  .logo-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 30%, var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+ 
+  /* Card */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03) inset;
+    backdrop-filter: blur(20px);
+    animation: fadeUp 0.6s ease both;
+  }
+ 
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+  .card-subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+ 
+  /* Form */
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .input-wrap { position: relative; }
+  .input-icon {
+    position: absolute;
+    left: 14px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    display: flex;
+  }
+  .input-icon svg { width: 16px; height: 16px; }
+ 
+  input {
+    width: 100%;
+    padding: 12px 14px 12px 42px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  input::placeholder { color: var(--muted); }
+  input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,142,247,0.15);
+  }
+ 
+  /* Buttons */
+  .btn {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,0.08);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .btn:hover::after { opacity: 1; }
+ 
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    box-shadow: 0 6px 24px rgba(79,142,247,0.35);
+    margin-top: 8px;
+  }
+  .btn-success {
+    background: linear-gradient(135deg, var(--success), #15a87e);
+    color: #001a12;
+    box-shadow: 0 6px 24px rgba(34,211,165,0.3);
+    margin-top: 8px;
+  }
+ 
+  /* Divider */
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 22px 0;
+    color: var(--muted); font-size: 12px;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1;
+    height: 1px; background: var(--border);
+  }
+ 
+  /* Footer link */
+  .footer-link {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 20px;
+  }
+  .footer-link a {
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .footer-link a:hover { opacity: 0.8; }
+ 
+  /* Panel toggle */
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeUp 0.35s ease both; }
+ 
+  /* Toast */
+  #toast {
+    position: fixed;
+    top: 24px; right: 24px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    display: none;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    animation: slideIn 0.3s ease;
+    max-width: 280px;
+  }
+  .toast-icon { display: inline-block; margin-right: 8px; }
+ 
+  @keyframes slideIn {
+    from { transform: translateX(20px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes fadeUp {
+    from { transform: translateY(18px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes fadeDown {
+    from { transform: translateY(-12px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+ 
+  /* Loading spinner inside button */
+  .btn .spinner {
+    display: none;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .btn.loading .btn-text { display: none; }
+  .btn.loading .spinner { display: block; }
+</style>
+</head>
+<body>
+ 
+<div class="bg-ambient">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="bg-grid"></div>
+ 
+<div class="wrapper">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+      </svg>
+    </div>
+    <div class="logo-name">NEXUS</div>
+  </div>
+ 
+  <div class="card">
+ 
+    <!-- REGISTER -->
+    <div class="panel active" id="registerPanel">
+      <div class="card-title">Tạo tài khoản</div>
+      <div class="card-subtitle">Điền thông tin để bắt đầu</div>
+ 
+      <div class="field">
+        <label>Họ và tên</label>
+        <div class="input-wrap">
+          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          <input id="name" type="text" placeholder="Nguyễn Văn A">
+        </div>
+      </div>
+ 
+      <div class="field">
+        <label>Email / Username</label>
+        <div class="input-wrap">
+          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+          <input id="email" type="text" placeholder="email@example.com">
+        </div>
+      </div>
+ 
+      <div class="field">
+        <label>Mật khẩu</label>
+        <div class="input-wrap">
+          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <input id="pass" type="password" placeholder="••••••••">
+        </div>
+      </div>
+ 
+      <button class="btn btn-success" id="registerBtn" onclick="register()">
+        <span class="btn-text">Đăng ký</span>
+        <span class="spinner"></span>
+      </button>
+ 
+      <div class="footer-link">Đã có tài khoản? <a onclick="showLogin()">Đăng nhập</a></div>
+    </div>
+ 
+    <!-- LOGIN -->
+    <div class="panel" id="loginPanel">
+      <div class="card-title">Chào mừng trở lại</div>
+      <div class="card-subtitle">Đăng nhập để tiếp tục</div>
+ 
+      <div class="field">
+        <label>Email / Username</label>
+        <div class="input-wrap">
+          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+          <input id="l_email" type="text" placeholder="email@example.com">
+        </div>
+      </div>
+ 
+      <div class="field">
+        <label>Mật khẩu</label>
+        <div class="input-wrap">
+          <span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <input id="l_pass" type="password" placeholder="••••••••">
+        </div>
+      </div>
+ 
+      <button class="btn btn-primary" id="loginBtn" onclick="login()">
+        <span class="btn-text">Đăng nhập</span>
+        <span class="spinner"></span>
+      </button>
+ 
+      <div class="footer-link">Chưa có tài khoản? <a onclick="showRegister()">Đăng ký ngay</a></div>
+    </div>
+ 
+  </div>
+</div>
+ 
+<div id="toast"></div>
+ 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+ 
+const firebaseConfig = {
+  apiKey: "AIzaSyA-G3BfucCstuMlQDKDsQVu3daQ854tuCQ",
+  authDomain: "csdl-login.firebaseapp.com",
+  databaseURL: "https://csdl-login-default-rtdb.firebaseio.com/",
+  projectId: "csdl-login",
+  storageBucket: "csdl-login.firebasestorage.app",
+  messagingSenderId: "1036020118468",
+  appId: "1:1036020118468:web:8b25fa3cae3d2ee9986a91"
+};
+ 
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+ 
+function toast(msg, type = "success") {
+  const t = document.getElementById("toast");
+  const icons = { success: "✓", error: "✕", info: "ℹ" };
+  const colors = {
+    success: "rgba(22,65,45,0.95)",
+    error:   "rgba(65,22,28,0.95)",
+    info:    "rgba(20,40,70,0.95)"
+  };
+  const borders = {
+    success: "rgba(34,211,165,0.3)",
+    error:   "rgba(242,92,110,0.3)",
+    info:    "rgba(79,142,247,0.3)"
+  };
+  t.innerHTML = `<span class="toast-icon">${icons[type]}</span>${msg}`;
+  t.style.background = colors[type];
+  t.style.borderColor = borders[type];
+  t.style.display = "block";
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.style.display = "none", 2800);
+}
+ 
+function setLoading(btn, state) {
+  btn.classList.toggle("loading", state);
+  btn.disabled = state;
+}
+ 
+window.showLogin = () => {
+  document.getElementById("registerPanel").classList.remove("active");
+  document.getElementById("loginPanel").classList.add("active");
+};
+ 
+window.showRegister = () => {
+  document.getElementById("loginPanel").classList.remove("active");
+  document.getElementById("registerPanel").classList.add("active");
+};
+ 
+window.register = async () => {
+  const name  = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const pass  = document.getElementById("pass").value;
+  const btn   = document.getElementById("registerBtn");
+ 
+  if (!name || !email || !pass) { toast("Vui lòng điền đầy đủ thông tin", "error"); return; }
+ 
+  setLoading(btn, true);
+  try {
+    await set(ref(db, "users/" + Date.now()), { name, email, password: pass, role: "user" });
+    toast("Đăng ký thành công! Đang chuyển hướng…", "success");
+    setTimeout(showLogin, 1800);
+  } catch(e) {
+    toast("Lỗi kết nối Firebase", "error");
+  } finally {
+    setLoading(btn, false);
+  }
+};
+ 
+window.login = async () => {
+  const email = document.getElementById("l_email").value.trim();
+  const pass  = document.getElementById("l_pass").value;
+  const btn   = document.getElementById("loginBtn");
+ 
+  if (!email || !pass) { toast("Vui lòng nhập thông tin", "error"); return; }
+ 
+  setLoading(btn, true);
+  try {
+    const snap = await get(ref(db, "users"));
+    if (!snap.exists()) { toast("Không có dữ liệu người dùng", "error"); return; }
+ 
+    let found = false;
+    snap.forEach(child => {
+      const u = child.val();
+      if (u.email === email && u.password === pass) found = true;
+    });
+ 
+    if (found) {
+      toast("Đăng nhập thành công!", "success");
+      setTimeout(() => window.location.href = "HTML.vn", 1500);
+    } else {
+      toast("Email hoặc mật khẩu không đúng", "error");
+    }
+  } catch(e) {
+    toast("Lỗi kết nối Firebase", "error");
+  } finally {
+    setLoading(btn, false);
+  }
+};
+ 
+// Enter key support
+document.addEventListener("keydown", e => {
+  if (e.key !== "Enter") return;
+  if (document.getElementById("loginPanel").classList.contains("active")) window.login();
+  else window.register();
+});
+</script>
+</body>
+</html>

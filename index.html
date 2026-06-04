@@ -108,7 +108,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(79,119,247,.1
 
 .req-admin-wrap{display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(217,119,6,.07);border:1.5px solid rgba(217,119,6,.2);border-radius:11px;margin-bottom:14px;cursor:pointer;transition:all .2s}
 .req-admin-wrap:hover{border-color:rgba(217,119,6,.4)}
-.req-admin-wrap input[type=checkbox]{width:auto;padding:0;background:transparent;border:none;box-shadow:none;width:16px;height:16px;cursor:pointer;accent-color:var(--warning)}
+.req-admin-wrap input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--warning);flex-shrink:0}
 .req-admin-wrap label{font-size:12.5px;font-weight:700;color:var(--warning);cursor:pointer;flex:1}
 .req-admin-wrap .req-sub{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
 
@@ -174,7 +174,6 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(79,119,247,.1
 .pending-head{padding:16px 24px;background:rgba(217,119,6,.06);border-bottom:1px solid rgba(217,119,6,.15);display:flex;align-items:center;gap:10px}
 .pending-head h2{font-size:15px;font-weight:800;color:var(--warning);flex:1}
 .pending-badge{background:rgba(217,119,6,.15);border:1px solid rgba(217,119,6,.3);color:var(--warning);font-size:11px;font-weight:800;padding:3px 10px;border-radius:50px}
-.pending-empty{padding:28px;text-align:center;color:var(--muted);font-size:13px;font-weight:600}
 .pending-list{padding:12px 16px;display:flex;flex-direction:column;gap:10px}
 .pending-item{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;transition:border-color .2s}
 .pending-item:hover{border-color:rgba(217,119,6,.3)}
@@ -228,10 +227,6 @@ td .uemail{font-size:12px;color:var(--text2)}
 .act-reset:hover{background:rgba(217,119,6,.2)}
 .act-rename{background:rgba(79,119,247,.08);border-color:rgba(79,119,247,.3);color:var(--accent)}
 .act-rename:hover{background:rgba(79,119,247,.18)}
-.act-approve{background:rgba(14,164,112,.1);border-color:rgba(14,164,112,.3);color:var(--success)}
-.act-approve:hover{background:rgba(14,164,112,.2)}
-.act-reject{background:rgba(229,62,62,.1);border-color:rgba(229,62,62,.3);color:var(--danger)}
-.act-reject:hover{background:rgba(229,62,62,.2)}
 
 .inline-form{display:none;margin-top:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;animation:fade-up .2s ease both}
 .inline-form.open{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -252,6 +247,11 @@ td .uemail{font-size:12px;color:var(--text2)}
 .sec-notice{background:rgba(14,164,112,.08);border:1.5px solid rgba(14,164,112,.25);border-radius:14px;padding:14px 18px;margin-bottom:24px;display:flex;align-items:flex-start;gap:12px;font-size:12.5px;color:var(--text2);line-height:1.6}
 .sec-notice .sec-icon{font-size:20px;flex-shrink:0;margin-top:1px}
 .sec-notice strong{color:var(--success);display:block;margin-bottom:3px;font-size:13px}
+
+/* FIREBASE RULES NOTICE */
+.rules-notice{background:rgba(79,119,247,.08);border:1.5px solid rgba(79,119,247,.3);border-radius:14px;padding:14px 18px;margin-bottom:24px;font-size:12.5px;color:var(--text2);line-height:1.7}
+.rules-notice strong{color:var(--accent);display:block;margin-bottom:6px;font-size:13px}
+.rules-notice code{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 12px;display:block;font-size:11px;font-family:monospace;color:var(--text);margin-top:8px;white-space:pre;overflow-x:auto}
 
 #confirmModal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.5);backdrop-filter:blur(6px)}
 #confirmModal.open{display:flex}
@@ -349,7 +349,7 @@ td .uemail{font-size:12px;color:var(--text2)}
           </div>
         </div>
         <div id="loginError" style="display:none;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.25);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12.5px;color:var(--danger);font-weight:600;text-align:center"></div>
-        <button class="btn btn-blue" id="btnLogin" onclick="login()">
+        <button class="btn btn-blue" id="btnLogin" onclick="doLogin()">
           <span class="bt">Đăng nhập</span><span class="spin"></span>
         </button>
         <div class="divider">Liên hệ Admin</div>
@@ -382,7 +382,7 @@ td .uemail{font-size:12px;color:var(--text2)}
           <label>Username</label>
           <div class="iw">
             <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
-            <input id="r_username" type="text" placeholder="vd: congthanh123" autocomplete="username" style="text-transform:lowercase">
+            <input id="r_username" type="text" placeholder="vd: congthanh123" autocomplete="username" oninput="this.value=this.value.toLowerCase()">
           </div>
         </div>
         <div class="field">
@@ -399,15 +399,15 @@ td .uemail{font-size:12px;color:var(--text2)}
             <input id="r_pass" type="password" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password">
           </div>
         </div>
-        <div class="req-admin-wrap" onclick="toggleAdminReq()">
-          <input type="checkbox" id="reqAdminCheck" onclick="event.stopPropagation();toggleAdminReq()">
+        <div class="req-admin-wrap" onclick="toggleAdminReq(event)">
+          <input type="checkbox" id="reqAdminCheck">
           <div>
-            <label for="reqAdminCheck">👑 Yêu cầu quyền Admin</label>
+            <label for="reqAdminCheck" onclick="event.stopPropagation()">👑 Yêu cầu quyền Admin</label>
             <div class="req-sub">Cần được duyệt bởi Admin gốc</div>
           </div>
         </div>
         <div id="regError" style="display:none;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.25);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12.5px;color:var(--danger);font-weight:600;text-align:center"></div>
-        <button class="btn btn-green" id="btnReg" onclick="register()">
+        <button class="btn btn-green" id="btnReg" onclick="doRegister()">
           <span class="bt">Tạo tài khoản</span><span class="spin"></span>
         </button>
         <div class="divider">Liên hệ Admin</div>
@@ -452,9 +452,26 @@ td .uemail{font-size:12px;color:var(--text2)}
     <div class="sec-notice">
       <span class="sec-icon">🔒</span>
       <div>
-        <strong>Bảo mật đã được cải thiện (v4)</strong>
+        <strong>Bảo mật đã được cải thiện (v5)</strong>
         Tài khoản yêu cầu quyền Admin cần được Admin gốc duyệt · Role gán qua DB không thể tự set · Reset MK qua Firebase Auth Email · Username index duy nhất.
       </div>
+    </div>
+
+    <div class="rules-notice" id="rulesNotice" style="display:none">
+      <strong>⚠️ Cần cập nhật Firebase Database Rules để tải được dữ liệu</strong>
+      Vào Firebase Console → Realtime Database → Rules → dán đoạn sau rồi bấm Publish:
+      <code>{
+  "rules": {
+    "users": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "usernames": {
+      ".read": true,
+      ".write": "auth != null"
+    }
+  }
+}</code>
     </div>
 
     <div class="stats-row">
@@ -510,11 +527,14 @@ td .uemail{font-size:12px;color:var(--text2)}
 <script type="module">
 import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-         updateProfile, signOut, sendPasswordResetEmail }
+         updateProfile, signOut, sendPasswordResetEmail, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDatabase, ref, set, get, update, onValue, off }
+import { getDatabase, ref, set, get, update, onValue, off, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+// ══════════════════════════════════════════
+// FIREBASE CONFIG — đã cập nhật đầy đủ
+// ══════════════════════════════════════════
 const cfg = {
   apiKey:            "AIzaSyA-G3BfucCstuMlQDKDsQVu3daQ854tuCQ",
   authDomain:        "csdl-login.firebaseapp.com",
@@ -522,7 +542,8 @@ const cfg = {
   projectId:         "csdl-login",
   storageBucket:     "csdl-login.firebasestorage.app",
   messagingSenderId: "1036020118468",
-  appId:             "1:1036020118468:web:6fe17be2597334f9986a91"
+  appId:             "1:1036020118468:web:6fe17be2597334f9986a91",
+  measurementId:     "G-WGC5R6VVBK"
 };
 const app  = initializeApp(cfg);
 const auth = getAuth(app);
@@ -532,7 +553,30 @@ const ADMIN_EMAIL = "bioverify@googlegroups.com";
 
 let allUsers      = [];
 let pendingAction = null;
-let usersListener = null; // FIX: giữ reference để unsubscribe khi logout
+let usersListenerRef = null;
+let usersListenerCb  = null;
+
+// Expose functions to global scope
+window.showLogin       = showLogin;
+window.showRegister    = showRegister;
+window.toggleAdminReq  = toggleAdminReq;
+window.doLogin         = doLogin;
+window.doRegister      = doRegister;
+window.toggleTheme     = toggleTheme;
+window.filterUsers     = filterUsers;
+window.closeModal      = closeModal;
+window.executeConfirm  = executeConfirm;
+window.confirmLogout   = confirmLogout;
+window.promptApproveAdmin = promptApproveAdmin;
+window.promptRejectAdmin  = promptRejectAdmin;
+window.promptLock         = promptLock;
+window.promptUnlock       = promptUnlock;
+window.toggleRenameForm   = toggleRenameForm;
+window.saveName           = saveName;
+window.toggleResetForm    = toggleResetForm;
+window.sendResetEmail_fn  = sendResetEmail_fn;
+window.toggleLinkForm     = toggleLinkForm;
+window.saveLink           = saveLink;
 
 /* ════════ WELCOME ════════ */
 (function initWelcome(){
@@ -544,7 +588,7 @@ let usersListener = null; // FIX: giữ reference để unsubscribe khi logout
     wrap.appendChild(s);
   }
   const bar=document.getElementById('wsBar'), pct=document.getElementById('wsPct');
-  const total=2200, start=Date.now();
+  const total=2000, start=Date.now();
   const tick=()=>{
     const p=Math.min((Date.now()-start)/total*100,100);
     bar.style.width=p+'%'; pct.textContent=Math.round(p)+'%';
@@ -563,45 +607,55 @@ function endWelcome(){
 }
 
 /* ════════ THEME ════════ */
-const applyTheme=t=>{
+function applyTheme(t){
   document.documentElement.setAttribute('data-theme',t);
-  document.getElementById('tIcon').textContent=t==='dark'?'☀️':'🌙';
-  document.getElementById('tLabel').textContent=t==='dark'?'Sáng':'Tối';
-};
+  document.getElementById('tIcon').textContent  = t==='dark'?'☀️':'🌙';
+  document.getElementById('tLabel').textContent = t==='dark'?'Sáng':'Tối';
+}
 applyTheme(localStorage.getItem('bva-theme')||'light');
-window.toggleTheme=()=>{
+function toggleTheme(){
   const next=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
   applyTheme(next); localStorage.setItem('bva-theme',next);
-};
+}
 
 /* ════════ TOAST ════════ */
 let toastTimer;
 function toast(msg,type='ok'){
   const el=document.getElementById('toast');
-  const map={ok:'background:#0ea470;color:#fff',err:'background:#e53e3e;color:#fff',info:'background:#4f77f7;color:#fff',warn:'background:#d97706;color:#fff'};
+  const map={
+    ok:  'background:#0ea470;color:#fff',
+    err: 'background:#e53e3e;color:#fff',
+    info:'background:#4f77f7;color:#fff',
+    warn:'background:#d97706;color:#fff'
+  };
   el.textContent=msg; el.style.cssText=(map[type]||map.ok)+';display:block';
   clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.style.display='none',3200);
 }
-const ld=(btn,on)=>{btn.classList.toggle('ld',on);btn.disabled=on};
+function ld(btn,on){ btn.classList.toggle('ld',on); btn.disabled=on; }
 
 /* ════════ PANELS ════════ */
-window.showLogin=()=>{
-  document.getElementById('pLogin').classList.add('on'); document.getElementById('pReg').classList.remove('on');
-  document.getElementById('t-login').classList.add('on'); document.getElementById('t-reg').classList.remove('on');
-  hideError('loginError'); hideError('regError');
-};
-window.showRegister=()=>{
-  document.getElementById('pReg').classList.add('on'); document.getElementById('pLogin').classList.remove('on');
-  document.getElementById('t-reg').classList.add('on'); document.getElementById('t-login').classList.remove('on');
-  hideError('loginError'); hideError('regError');
-};
-function showError(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block'}
-function hideError(id){document.getElementById(id).style.display='none'}
+function showLogin(){
+  document.getElementById('pLogin').classList.add('on');
+  document.getElementById('pReg').classList.remove('on');
+  document.getElementById('t-login').classList.add('on');
+  document.getElementById('t-reg').classList.remove('on');
+  hideErr('loginError'); hideErr('regError');
+}
+function showRegister(){
+  document.getElementById('pReg').classList.add('on');
+  document.getElementById('pLogin').classList.remove('on');
+  document.getElementById('t-reg').classList.add('on');
+  document.getElementById('t-login').classList.remove('on');
+  hideErr('loginError'); hideErr('regError');
+}
+function showErr(id,msg){ const el=document.getElementById(id); el.innerHTML=msg; el.style.display='block'; }
+function hideErr(id){ document.getElementById(id).style.display='none'; }
 
-window.toggleAdminReq=()=>{
+function toggleAdminReq(e){
+  if(e) e.stopPropagation();
   const cb=document.getElementById('reqAdminCheck');
   cb.checked=!cb.checked;
-};
+}
 
 /* ════════ RESULT OVERLAY ════════ */
 function showResult(icon,title,msg,barColor,duration,cb){
@@ -612,93 +666,154 @@ function showResult(icon,title,msg,barColor,duration,cb){
   bar.className='result-progress-bar '+barColor;
   bar.style.transition='none'; bar.style.width='0%';
   ov.classList.add('show');
-  requestAnimationFrame(()=>{bar.style.transition=`width ${duration}ms linear`;bar.style.width='100%';});
-  setTimeout(()=>{ov.classList.remove('show');if(cb)cb();},duration+200);
+  requestAnimationFrame(()=>{
+    bar.style.transition=`width ${duration}ms linear`;
+    bar.style.width='100%';
+  });
+  setTimeout(()=>{ ov.classList.remove('show'); if(cb) cb(); }, duration+200);
+}
+
+/* ════════ FIREBASE ERRORS → Tiếng Việt ════════ */
+function firebaseErrVi(e){
+  const code = typeof e==='string' ? e : (e&&(e.code||e.message))||'';
+  const map = {
+    'auth/user-not-found':        'Email chưa được đăng ký',
+    'auth/wrong-password':        'Mật khẩu không đúng',
+    'auth/invalid-credential':    'Email hoặc mật khẩu không đúng',
+    'auth/email-already-in-use':  'Email này đã được đăng ký',
+    'auth/invalid-email':         'Địa chỉ email không hợp lệ',
+    'auth/weak-password':         'Mật khẩu quá yếu, tối thiểu 6 ký tự',
+    'auth/too-many-requests':     'Quá nhiều lần thử. Vui lòng thử lại sau',
+    'auth/network-request-failed':'Lỗi kết nối mạng',
+    'auth/operation-not-allowed': 'Chức năng này chưa được bật',
+    'auth/configuration-not-found':'Cấu hình Firebase không hợp lệ',
+    'permission-denied':          'Không có quyền truy cập — cần cập nhật Firebase Rules',
+    'PERMISSION_DENIED':          'Không có quyền truy cập — cần cập nhật Firebase Rules',
+  };
+  if(map[code]) return map[code];
+  if(code.includes('permission') || code.includes('PERMISSION')) return 'Không có quyền — cần cập nhật Firebase Database Rules';
+  const short=code.replace('Firebase: ','').replace(/\s*\(.*\)\./,'');
+  return short || 'Đã có lỗi xảy ra, vui lòng thử lại';
 }
 
 /* ════════ REGISTER ════════ */
-window.register=async()=>{
+async function doRegister(){
   const name     = document.getElementById('r_name').value.trim();
   const username = document.getElementById('r_username').value.trim().toLowerCase().replace(/[^a-z0-9_\.]/g,'');
   const email    = document.getElementById('r_email').value.trim();
   const pass     = document.getElementById('r_pass').value;
   const reqAdmin = document.getElementById('reqAdminCheck').checked;
   const btn      = document.getElementById('btnReg');
-  hideError('regError');
+  hideErr('regError');
 
-  if(!name||!username||!email||!pass){showError('regError','⚠️ Vui lòng điền đầy đủ thông tin');return}
-  if(username.length<3){showError('regError','⚠️ Username phải có ít nhất 3 ký tự');return}
-  if(pass.length<6){showError('regError','⚠️ Mật khẩu tối thiểu 6 ký tự');return}
+  // Validate
+  if(!name){showErr('regError','⚠️ Vui lòng nhập họ và tên');return}
+  if(!username||username.length<3){showErr('regError','⚠️ Username phải có ít nhất 3 ký tự (a-z, 0-9, _, .)');return}
+  if(!email){showErr('regError','⚠️ Vui lòng nhập email');return}
+  if(!pass||pass.length<6){showErr('regError','⚠️ Mật khẩu tối thiểu 6 ký tự');return}
   if(email.toLowerCase()===ADMIN_EMAIL.toLowerCase()){
-    showError('regError','❌ Email này không được phép đăng ký');return;
+    showErr('regError','❌ Email này không được phép đăng ký');return;
   }
 
   ld(btn,true);
   try{
-    const usnap=await get(ref(db,'usernames/'+username));
-    if(usnap.exists()){showError('regError','❌ Username "@'+username+'" đã được sử dụng');return}
+    // Kiểm tra username đã tồn tại chưa
+    const usnap = await get(ref(db,'usernames/'+username));
+    if(usnap.exists()){
+      showErr('regError','❌ Username "@'+username+'" đã được sử dụng');
+      return;
+    }
 
-    const cred=await createUserWithEmailAndPassword(auth,email,pass);
-    await updateProfile(cred.user,{displayName:name});
-    const uid=cred.user.uid;
+    // Tạo tài khoản Firebase Auth
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await updateProfile(cred.user, {displayName: name});
+    const uid = cred.user.uid;
     const role = reqAdmin ? 'pending_admin' : 'user';
 
-    await set(ref(db,'users/'+uid),{
-      name, username, email, role,
+    // Lưu vào Realtime DB
+    await set(ref(db,'users/'+uid), {
+      name,
+      username,
+      email,
+      role,
       locked: false,
       createdAt: Date.now(),
+      redirectUrl: '',
       ...(reqAdmin ? {adminRequestAt: Date.now()} : {})
     });
-    await set(ref(db,'usernames/'+username),uid);
+    await set(ref(db,'usernames/'+username), uid);
+
+    // Đăng xuất ngay (chờ admin duyệt hoặc đăng nhập lại)
     await signOut(auth);
 
+    // Reset form
+    ['r_name','r_username','r_email','r_pass'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('reqAdminCheck').checked=false;
+
     if(reqAdmin){
-      showResult('⏳','Yêu cầu đã gửi!','Tài khoản của bạn đang chờ Admin duyệt quyền. Vui lòng đợi xác nhận.','orange',3000,()=>{showLogin()});
+      showResult('⏳','Yêu cầu đã gửi!',
+        'Tài khoản của bạn đang chờ Admin duyệt quyền. Vui lòng đợi xác nhận.',
+        'orange', 3000, ()=>showLogin());
     } else {
-      toast('Đăng ký thành công! 🎉','ok');
-      ['r_name','r_username','r_email','r_pass'].forEach(id=>document.getElementById(id).value='');
-      document.getElementById('reqAdminCheck').checked=false;
-      setTimeout(showLogin,1600);
+      showResult('✅','Đăng ký thành công!',
+        'Tài khoản đã được tạo. Đang chuyển về trang đăng nhập...',
+        'green', 2000, ()=>showLogin());
     }
-  }catch(e){showError('regError','❌ '+firebaseErrVi(e));}
-  finally{ld(btn,false)}
-};
+  } catch(e){
+    console.error('Register error:', e);
+    showErr('regError','❌ '+firebaseErrVi(e));
+  } finally {
+    ld(btn,false);
+  }
+}
 
 /* ════════ LOGIN ════════ */
-window.login=async()=>{
-  const ident=document.getElementById('l_ident').value.trim();
-  const pass =document.getElementById('l_pass').value;
-  const btn  =document.getElementById('btnLogin');
-  hideError('loginError');
-  if(!ident||!pass){showError('loginError','⚠️ Vui lòng nhập đầy đủ thông tin');return}
-  ld(btn,true);
-  try{
-    let email=ident;
-    if(!ident.includes('@')){
-      const usnap=await get(ref(db,'usernames/'+ident.toLowerCase()));
-      if(!usnap.exists()){showError('loginError','❌ Username không tồn tại');return;}
-      const uid=usnap.val();
-      const userSnap=await get(ref(db,'users/'+uid));
-      if(!userSnap.exists()){showError('loginError','⚠️ Tài khoản không tồn tại trong hệ thống.');return}
-      email=userSnap.val().email;
-    }
-    const cred=await signInWithEmailAndPassword(auth,email,pass);
-    const uid=cred.user.uid;
+async function doLogin(){
+  const ident = document.getElementById('l_ident').value.trim();
+  const pass  = document.getElementById('l_pass').value;
+  const btn   = document.getElementById('btnLogin');
+  hideErr('loginError');
 
-    /* Admin gốc */
+  if(!ident||!pass){ showErr('loginError','⚠️ Vui lòng nhập đầy đủ thông tin'); return; }
+  ld(btn,true);
+
+  try{
+    let email = ident;
+
+    // Nếu nhập username (không có @), tra cứu email
+    if(!ident.includes('@')){
+      const usnap = await get(ref(db,'usernames/'+ident.toLowerCase()));
+      if(!usnap.exists()){
+        showErr('loginError','❌ Username không tồn tại');
+        return;
+      }
+      const uid = usnap.val();
+      const userSnap = await get(ref(db,'users/'+uid));
+      if(!userSnap.exists()){
+        showErr('loginError','⚠️ Tài khoản không tồn tại trong hệ thống.');
+        return;
+      }
+      email = userSnap.val().email;
+    }
+
+    const cred = await signInWithEmailAndPassword(auth, email, pass);
+    const uid  = cred.user.uid;
+
+    // ── Admin gốc ──
     if(email.toLowerCase()===ADMIN_EMAIL.toLowerCase()){
+      // Đảm bảo có record trong DB với role admin
       const adminSnap = await get(ref(db,'users/'+uid));
       if(!adminSnap.exists()){
         await set(ref(db,'users/'+uid),{
-          name:'bioverify', username:'bioverify', email: ADMIN_EMAIL,
-          role:'admin', locked:false, createdAt:Date.now()
+          name:'bioverify', username:'bioverify', email:ADMIN_EMAIL,
+          role:'admin', locked:false, createdAt:Date.now(), redirectUrl:''
         });
-        await set(ref(db,'usernames/bioverify'),uid);
+        await set(ref(db,'usernames/bioverify'), uid);
       } else if(adminSnap.val().role!=='admin'){
         await update(ref(db,'users/'+uid),{role:'admin'});
       }
       document.getElementById('adminDisplayName').textContent =
-        cred.user.displayName || 'bioverify';
+        cred.user.displayName || adminSnap?.val()?.name || 'bioverify';
       showResult('👑','Xin Chào Quản Trị Viên!','Đang tải trang quản trị...','blue',2000,()=>{
         document.getElementById('loginApp').style.display='none';
         document.getElementById('adminApp').style.display='block';
@@ -707,18 +822,20 @@ window.login=async()=>{
       return;
     }
 
-    const snap=await get(ref(db,'users/'+uid));
+    // ── User thường ──
+    const snap = await get(ref(db,'users/'+uid));
     if(!snap.exists()){
-      showError('loginError','⚠️ Tài khoản không tồn tại trong hệ thống.');
+      showErr('loginError','⚠️ Tài khoản không tồn tại trong hệ thống.');
       await signOut(auth); return;
     }
-    const u=snap.val();
+    const u = snap.val();
+
     if(u.locked===true){
-      showError('loginError','🔒 Tài khoản của bạn đang tạm khóa. Vui lòng liên hệ Admin.');
+      showErr('loginError','🔒 Tài khoản của bạn đang tạm khóa. Vui lòng liên hệ Admin.');
       await signOut(auth); return;
     }
     if(u.role==='pending_admin'){
-      showError('loginError','⏳ Tài khoản của bạn đang chờ Admin duyệt quyền. Vui lòng thử lại sau.');
+      showErr('loginError','⏳ Tài khoản đang chờ Admin duyệt quyền. Vui lòng thử lại sau.');
       await signOut(auth); return;
     }
     if(u.role==='admin'){
@@ -729,92 +846,78 @@ window.login=async()=>{
         loadUsers();
       });
     } else {
-      // FIX: dùng redirectUrl do admin cấp trong DB, fallback html.vn
       const redirectUrl = u.redirectUrl || 'https://html.vn';
       showResult('✅','Approved!','Đăng nhập thành công. Đang chuyển hướng...','green',2000,()=>{
         window.location.href = redirectUrl;
       });
     }
-  }catch(e){showError('loginError','❌ '+firebaseErrVi(e));}
-  finally{ld(btn,false)}
-};
-
-/* ════════ FIREBASE ERRORS → Tiếng Việt ════════ */
-function firebaseErrVi(e){
-  // e có thể là error object hoặc string code
-  const code = (typeof e === 'string') ? e : (e && (e.code || e.message)) || '';
-  const map={
-    'auth/user-not-found':        'Email chưa được đăng ký',
-    'auth/wrong-password':        'Mật khẩu không đúng',
-    'auth/invalid-credential':    'Email hoặc mật khẩu không đúng',
-    'auth/email-already-in-use':  'Email này đã được đăng ký',
-    'auth/invalid-email':         'Địa chỉ email không hợp lệ',
-    'auth/weak-password':         'Mật khẩu quá yếu, tối thiểu 6 ký tự',
-    'auth/too-many-requests':     'Quá nhiều lần thử. Vui lòng thử lại sau',
-    'auth/network-request-failed':'Lỗi kết nối mạng',
-    'auth/operation-not-allowed': 'Chức năng này chưa được bật trên Firebase',
-    'auth/configuration-not-found':'Cấu hình Firebase không hợp lệ',
-    'permission-denied':          'Không có quyền truy cập dữ liệu',
-  };
-  if(map[code]) return map[code];
-  // trích code ngắn gọn từ message nếu có
-  const short = code.replace('Firebase: ','').replace(/\s*\(.*\)\./,'');
-  return short || 'Đã có lỗi xảy ra, vui lòng thử lại';
+  } catch(e){
+    console.error('Login error:', e);
+    showErr('loginError','❌ '+firebaseErrVi(e));
+  } finally {
+    ld(btn,false);
+  }
 }
 
-/* ════════ LOAD USERS — FIX: dùng get() thay onValue() để tránh trùng lặp ════════ */
+/* ════════ LOAD USERS (real-time listener) ════════ */
 function loadUsers(){
-  // FIX: reset UI loading state
+  document.getElementById('tblLoading').innerHTML='<div class="spinner"></div>Đang tải dữ liệu...';
   document.getElementById('tblLoading').style.display='block';
   document.getElementById('usersTable').style.display='none';
   document.getElementById('emptyState').style.display='none';
+  document.getElementById('rulesNotice').style.display='none';
 
-  // FIX: unsubscribe listener cũ nếu còn
-  if(usersListener){
-    off(ref(db,'users'), 'value', usersListener);
-    usersListener = null;
+  // Xóa listener cũ
+  if(usersListenerRef && usersListenerCb){
+    off(usersListenerRef,'value',usersListenerCb);
   }
 
-  // FIX: dùng onValue một lần duy nhất, lưu reference
-  const usersRef = ref(db,'users');
-  usersListener = onValue(usersRef, snap => {
-    allUsers = [];
+  usersListenerRef = ref(db,'users');
+  usersListenerCb  = (snap)=>{
+    allUsers=[];
     if(snap.exists()){
       snap.forEach(c=>{
-        const v = c.val();
+        const v=c.val();
         allUsers.push({
-          key:        c.key,
-          name:       v.name       || '—',
-          email:      v.email      || '—',
-          username:   v.username   || '—',
-          role:       v.role       || 'user',
-          locked:     v.locked     === true,
-          adminRequestAt: v.adminRequestAt || null,
-          redirectUrl:    v.redirectUrl    || ""
+          key:           c.key,
+          name:          v.name         || '—',
+          email:         v.email        || '—',
+          username:      v.username     || '—',
+          role:          v.role         || 'user',
+          locked:        v.locked       === true,
+          adminRequestAt:v.adminRequestAt|| null,
+          redirectUrl:   v.redirectUrl  || ''
         });
       });
     }
-    const pending    = allUsers.filter(u => u.role === 'pending_admin');
-    const nonPending = allUsers.filter(u => u.role !== 'pending_admin');
+    const pending    = allUsers.filter(u=>u.role==='pending_admin');
+    const nonPending = allUsers.filter(u=>u.role!=='pending_admin');
     renderPendingAdmins(pending);
     renderUsers(nonPending);
     updateStats(allUsers);
-    document.getElementById('tblLoading').style.display = 'none';
-  }, err => {
-    // FIX: hiển thị lỗi rõ ràng thay vì loading mãi
-    document.getElementById('tblLoading').innerHTML =
-      `<div style="color:var(--danger);font-size:13px">⚠️ Lỗi tải dữ liệu: ${err.message}<br>
-       <button onclick="loadUsers()" style="margin-top:10px;padding:8px 16px;border-radius:8px;
-       background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:700">Thử lại</button></div>`;
+    document.getElementById('tblLoading').style.display='none';
+  };
+
+  onValue(usersListenerRef, usersListenerCb, (err)=>{
+    console.error('DB error:', err);
+    const isPermission = err.code==='PERMISSION_DENIED' || (err.message||'').includes('permission');
+    document.getElementById('tblLoading').innerHTML=`
+      <div style="color:var(--danger);font-size:13px;padding:8px">
+        ⚠️ Lỗi tải dữ liệu: <b>${err.message}</b><br><br>
+        ${isPermission ? '<span style="color:var(--warning)">👉 Cần cập nhật Firebase Database Rules (xem hướng dẫn ở trên)</span><br><br>' : ''}
+        <button onclick="loadUsers()" style="margin-top:8px;padding:9px 20px;border-radius:9px;
+        background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:700;font-size:13px">🔄 Thử lại</button>
+      </div>`;
+    if(isPermission) document.getElementById('rulesNotice').style.display='block';
   });
 }
 
 function updateStats(users){
-  document.getElementById('sTotalUsers').textContent  = users.length;
-  document.getElementById('sActiveUsers').textContent = users.filter(u=>!u.locked&&u.role!=='pending_admin').length;
-  document.getElementById('sLockedUsers').textContent = users.filter(u=>u.locked).length;
-  document.getElementById('sAdminUsers').textContent  = users.filter(u=>u.role==='admin').length;
-  document.getElementById('sPendingUsers').textContent= users.filter(u=>u.role==='pending_admin').length;
+  document.getElementById('sTotalUsers').textContent   = users.length;
+  document.getElementById('sActiveUsers').textContent  = users.filter(u=>!u.locked&&u.role!=='pending_admin').length;
+  document.getElementById('sLockedUsers').textContent  = users.filter(u=>u.locked).length;
+  document.getElementById('sAdminUsers').textContent   = users.filter(u=>u.role==='admin').length;
+  document.getElementById('sPendingUsers').textContent = users.filter(u=>u.role==='pending_admin').length;
   const nonPending = users.filter(u=>u.role!=='pending_admin');
   document.getElementById('userCount').textContent = `— ${nonPending.length} tài khoản`;
 }
@@ -825,9 +928,9 @@ function renderPendingAdmins(pending){
   const list    = document.getElementById('pendingList');
   document.getElementById('pendingCount').textContent = pending.length;
   if(!pending.length){ section.style.display='none'; return; }
-  section.style.display = 'block';
-  list.innerHTML = pending.map(u=>{
-    const dt = u.adminRequestAt ? new Date(u.adminRequestAt).toLocaleString('vi-VN') : '—';
+  section.style.display='block';
+  list.innerHTML=pending.map(u=>{
+    const dt=u.adminRequestAt ? new Date(u.adminRequestAt).toLocaleString('vi-VN') : '—';
     return `
     <div class="pending-item" id="pend-${u.key}">
       <div class="pending-avatar">👑</div>
@@ -847,12 +950,12 @@ function renderPendingAdmins(pending){
 
 /* ════════ RENDER TABLE ════════ */
 function renderUsers(users){
-  const tbody = document.getElementById('usersTbody');
-  const empty = document.getElementById('emptyState');
-  const table = document.getElementById('usersTable');
+  const tbody=document.getElementById('usersTbody');
+  const empty=document.getElementById('emptyState');
+  const table=document.getElementById('usersTable');
   if(!users.length){ table.style.display='none'; empty.style.display='block'; return; }
   table.style.display='table'; empty.style.display='none';
-  tbody.innerHTML = users.map(u=>`
+  tbody.innerHTML=users.map(u=>`
     <tr class="${u.locked?'locked-row':''}" id="row-${u.key}">
       <td>
         <div class="uname">${esc(u.name)}</div>
@@ -860,7 +963,7 @@ function renderUsers(users){
         <div class="uid">#${u.key}</div>
       </td>
       <td>
-        <span style="font-family:monospace;font-size:12px;font-weight:700;color:var(--accent);background:rgba(79,119,247,.08);padding:3px 8px;border-radius:6px;border:1px solid rgba(79,119,247,.2)" id="uname-badge-${u.key}">@${esc(u.username)}</span>
+        <span style="font-family:monospace;font-size:12px;font-weight:700;color:var(--accent);background:rgba(79,119,247,.08);padding:3px 8px;border-radius:6px;border:1px solid rgba(79,119,247,.2)">@${esc(u.username)}</span>
       </td>
       <td><span class="badge ${u.locked?'badge-locked':'badge-active'}">${u.locked?'🔒 Đã khóa':'✅ Hoạt động'}</span></td>
       <td><span class="badge ${u.role==='admin'?'badge-admin':'badge-user'}">${u.role==='admin'?'👑 Admin':'👤 User'}</span></td>
@@ -873,14 +976,13 @@ function renderUsers(users){
           <button class="act-btn act-rename" style="font-size:10px;padding:4px 8px" onclick="toggleLinkForm('${u.key}','${esc(u.redirectUrl||'')}')">✏️ Đặt link</button>
         </div>
         <div class="inline-form rename-form" id="lf-${u.key}" style="flex-direction:column;align-items:stretch;gap:8px;margin-top:6px">
-          <input type="url" id="nl-${u.key}" placeholder="https://example.com/..." style="width:100%">
+          <input type="url" id="nl-${u.key}" placeholder="https://example.com/...">
           <div style="display:flex;gap:8px">
             <button class="btn-save blue" onclick="saveLink('${u.key}','${esc(u.name)}')">💾 Lưu link</button>
             <button class="btn-cancel-form" onclick="toggleLinkForm('${u.key}')">✕ Hủy</button>
           </div>
           <div id="lf-err-${u.key}" style="display:none;font-size:11px;font-weight:600;color:var(--danger)"></div>
-        </div>`
-        :`<span style="font-size:11px;color:var(--muted)">—</span>`}
+        </div>` : `<span style="font-size:11px;color:var(--muted)">—</span>`}
       </td>
       <td>
         <div class="actions">
@@ -888,15 +990,15 @@ function renderUsers(users){
             ?`<button class="act-btn act-unlock" onclick="promptUnlock('${u.key}','${esc(u.name)}')">🔓 Mở khóa</button>`
             :`<button class="act-btn act-lock"   onclick="promptLock('${u.key}','${esc(u.name)}')">🔒 Khóa</button>`}
           <button class="act-btn act-rename" onclick="toggleRenameForm('${u.key}','${esc(u.name)}','${esc(u.username)}')">✏️ Đổi tên</button>
-          <button class="act-btn act-reset"  onclick="toggleResetForm('${u.key}','${esc(u.email)}')">🔑 Reset MK</button>
+          <button class="act-btn act-reset"  onclick="toggleResetForm('${u.key}','${esc(u.email)}','${esc(u.name)}')">🔑 Reset MK</button>
         </div>
         <div class="inline-form rename-form" id="rnf-${u.key}" style="flex-direction:column;align-items:stretch;gap:10px">
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <input type="text" id="nn-${u.key}" placeholder="Họ và tên mới..."  maxlength="60" style="flex:1;min-width:120px">
-            <input type="text" id="nu-${u.key}" placeholder="Username mới..."   maxlength="30" style="flex:1;min-width:120px;text-transform:lowercase">
+            <input type="text" id="nn-${u.key}" placeholder="Họ và tên mới..." maxlength="60" style="flex:1;min-width:120px">
+            <input type="text" id="nu-${u.key}" placeholder="Username mới..."  maxlength="30" style="flex:1;min-width:120px" oninput="this.value=this.value.toLowerCase()">
           </div>
           <div style="display:flex;gap:8px">
-            <button class="btn-save blue"   onclick="saveName('${u.key}')">💾 Lưu</button>
+            <button class="btn-save blue" onclick="saveName('${u.key}')">💾 Lưu</button>
             <button class="btn-cancel-form" onclick="toggleRenameForm('${u.key}')">✕ Hủy</button>
           </div>
           <div id="rnf-err-${u.key}" style="display:none;font-size:11.5px;color:var(--danger);font-weight:600"></div>
@@ -907,8 +1009,8 @@ function renderUsers(users){
             📧 Email: <b>${esc(u.email)}</b>
           </div>
           <div style="display:flex;gap:8px">
-            <button class="btn-save orange" onclick="sendResetEmail('${u.key}','${esc(u.email)}','${esc(u.name)}')">📨 Gửi email reset</button>
-            <button class="btn-cancel-form" onclick="toggleResetForm('${u.key}','${esc(u.email)}')">✕ Hủy</button>
+            <button class="btn-save orange" onclick="sendResetEmail_fn('${u.key}','${esc(u.email)}','${esc(u.name)}')">📨 Gửi email reset</button>
+            <button class="btn-cancel-form" onclick="toggleResetForm('${u.key}')">✕ Hủy</button>
           </div>
           <div id="rf-err-${u.key}" style="display:none;font-size:11.5px;font-weight:600"></div>
         </div>
@@ -917,116 +1019,156 @@ function renderUsers(users){
 }
 
 /* ════════ SEARCH ════════ */
-window.filterUsers=()=>{
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  const nonPending = allUsers.filter(u=>u.role!=='pending_admin');
+function filterUsers(){
+  const q=document.getElementById('searchInput').value.trim().toLowerCase();
+  const nonPending=allUsers.filter(u=>u.role!=='pending_admin');
   renderUsers(q ? nonPending.filter(u=>
-    u.name.toLowerCase().includes(q) ||
-    u.email.toLowerCase().includes(q) ||
+    u.name.toLowerCase().includes(q)||
+    u.email.toLowerCase().includes(q)||
     u.username.toLowerCase().includes(q)
   ) : nonPending);
-};
+}
 
 /* ════════ APPROVE / REJECT ADMIN ════════ */
-window.promptApproveAdmin=(key,name)=>{
+function promptApproveAdmin(key,name){
   pendingAction={type:'approve_admin',key,name};
   openModal('👑','Duyệt quyền Admin?',`Tài khoản <b>${name}</b> sẽ được cấp quyền Admin.`,'success','✅ Duyệt ngay');
-};
-window.promptRejectAdmin=(key,name)=>{
+}
+function promptRejectAdmin(key,name){
   pendingAction={type:'reject_admin',key,name};
   openModal('❌','Từ chối yêu cầu?',`Tài khoản <b>${name}</b> sẽ bị hạ xuống User thường.`,'danger','❌ Từ chối');
-};
+}
 
 /* ════════ LOCK / UNLOCK ════════ */
-window.promptLock  =(key,name)=>{ pendingAction={type:'lock',  key,name}; openModal('🔒','Khóa tài khoản?',  `Tài khoản <b>${name}</b> sẽ bị khóa.`,    'danger','Khóa ngay'); };
-window.promptUnlock=(key,name)=>{ pendingAction={type:'unlock',key,name}; openModal('🔓','Mở khóa?',         `Tài khoản <b>${name}</b> sẽ được mở khóa.`,'success','Mở khóa'); };
+function promptLock(key,name){
+  pendingAction={type:'lock',key,name};
+  openModal('🔒','Khóa tài khoản?',`Tài khoản <b>${name}</b> sẽ bị khóa.`,'danger','Khóa ngay');
+}
+function promptUnlock(key,name){
+  pendingAction={type:'unlock',key,name};
+  openModal('🔓','Mở khóa?',`Tài khoản <b>${name}</b> sẽ được mở khóa.`,'success','Mở khóa');
+}
 
-/* ════════ RENAME + USERNAME ════════ */
-window.toggleRenameForm=(key,currentName,currentUsername)=>{
+/* ════════ RENAME ════════ */
+function toggleRenameForm(key,currentName,currentUsername){
   const rf=document.getElementById('rf-'+key);
   if(rf) rf.classList.remove('open');
+  const lf=document.getElementById('lf-'+key);
+  if(lf) lf.classList.remove('open');
   const rnf=document.getElementById('rnf-'+key);
   rnf.classList.toggle('open');
-  if(rnf.classList.contains('open')){
-    document.getElementById('nn-'+key).value = currentName==='—'?'':currentName;
-    document.getElementById('nu-'+key).value = currentUsername==='—'?'':currentUsername;
+  if(rnf.classList.contains('open')&&currentName!==undefined){
+    document.getElementById('nn-'+key).value=currentName==='—'?'':currentName;
+    document.getElementById('nu-'+key).value=currentUsername==='—'?'':currentUsername;
     document.getElementById('nn-'+key).focus();
   }
-};
-window.saveName=async(key)=>{
+}
+async function saveName(key){
   const newName     = document.getElementById('nn-'+key).value.trim();
   const newUsername = document.getElementById('nu-'+key).value.trim().toLowerCase().replace(/[^a-z0-9_\.]/g,'');
   const errEl       = document.getElementById('rnf-err-'+key);
   errEl.style.display='none';
-  if(!newName||newName.length<2){errEl.textContent='Tên phải có ít nhất 2 ký tự';errEl.style.display='block';return}
-  if(newUsername&&newUsername.length<3){errEl.textContent='Username phải có ít nhất 3 ký tự';errEl.style.display='block';return}
+  if(!newName||newName.length<2){ errEl.textContent='Tên phải có ít nhất 2 ký tự'; errEl.style.display='block'; return; }
+  if(newUsername&&newUsername.length<3){ errEl.textContent='Username phải có ít nhất 3 ký tự'; errEl.style.display='block'; return; }
   try{
+    const updates = {name: newName};
     if(newUsername){
-      const oldUser=allUsers.find(x=>x.key===key);
-      if(newUsername!==oldUser?.username){
-        const snap=await get(ref(db,'usernames/'+newUsername));
-        if(snap.exists()&&snap.val()!==key){errEl.textContent='Username "@'+newUsername+'" đã được sử dụng';errEl.style.display='block';return;}
-        if(oldUser?.username&&oldUser.username!=='—'){
+      const oldUser = allUsers.find(x=>x.key===key);
+      if(newUsername !== oldUser?.username){
+        const snap = await get(ref(db,'usernames/'+newUsername));
+        if(snap.exists()&&snap.val()!==key){
+          errEl.textContent='Username "@'+newUsername+'" đã được sử dụng';
+          errEl.style.display='block'; return;
+        }
+        if(oldUser?.username && oldUser.username!=='—'){
           await update(ref(db,'usernames'),{[oldUser.username]:null});
         }
-        await set(ref(db,'usernames/'+newUsername),key);
+        await set(ref(db,'usernames/'+newUsername), key);
+        updates.username = newUsername;
       }
     }
-    await update(ref(db,'users/'+key),{name:newName,...(newUsername?{username:newUsername}:{})});
+    await update(ref(db,'users/'+key), updates);
     document.getElementById('rnf-'+key).classList.remove('open');
     toast('✅ Đã cập nhật tài khoản','ok');
-  }catch(e){ toast('Lỗi khi lưu: '+e.message,'err') }
-};
+  }catch(e){ toast('Lỗi khi lưu: '+e.message,'err'); }
+}
 
-/* ════════ RESET PASSWORD — FIX: gửi email qua Firebase Auth ════════ */
-window.toggleResetForm=(key,email)=>{
+/* ════════ LINK REDIRECT ════════ */
+function toggleLinkForm(key,currentUrl){
   const rnf=document.getElementById('rnf-'+key);
   if(rnf) rnf.classList.remove('open');
+  const rf=document.getElementById('rf-'+key);
+  if(rf) rf.classList.remove('open');
+  const lf=document.getElementById('lf-'+key);
+  lf.classList.toggle('open');
+  if(lf.classList.contains('open')&&currentUrl!==undefined){
+    document.getElementById('nl-'+key).value=currentUrl;
+    document.getElementById('nl-'+key).focus();
+  }
+}
+async function saveLink(key,name){
+  const url   = document.getElementById('nl-'+key).value.trim();
+  const errEl = document.getElementById('lf-err-'+key);
+  errEl.style.display='none';
+  if(url && !url.startsWith('http')){
+    errEl.textContent='⚠️ URL phải bắt đầu bằng http:// hoặc https://';
+    errEl.style.display='block'; return;
+  }
+  try{
+    await update(ref(db,'users/'+key),{redirectUrl: url});
+    document.getElementById('lf-'+key).classList.remove('open');
+    toast('✅ Đã lưu link redirect cho '+name,'ok');
+  }catch(e){ toast('Lỗi khi lưu: '+e.message,'err'); }
+}
+
+/* ════════ RESET PASSWORD ════════ */
+function toggleResetForm(key,email,name){
+  const rnf=document.getElementById('rnf-'+key);
+  if(rnf) rnf.classList.remove('open');
+  const lf=document.getElementById('lf-'+key);
+  if(lf) lf.classList.remove('open');
   const rf=document.getElementById('rf-'+key);
   rf.classList.toggle('open');
   if(rf.classList.contains('open')){
     const err=document.getElementById('rf-err-'+key);
     if(err){ err.style.display='none'; err.textContent=''; }
   }
-};
-
-window.sendResetEmail=async(key,email,name)=>{
+}
+async function sendResetEmail_fn(key,email,name){
   const errEl=document.getElementById('rf-err-'+key);
   errEl.style.display='none';
   if(!email||email==='—'){
     errEl.textContent='⚠️ Tài khoản này không có email';
-    errEl.style.cssText='display:block;color:var(--danger)';
-    return;
+    errEl.style.cssText='display:block;color:var(--danger)'; return;
   }
   try{
     await sendPasswordResetEmail(auth, email);
     errEl.textContent='✅ Đã gửi email đặt lại mật khẩu!';
     errEl.style.cssText='display:block;color:var(--success)';
-    toast(`📨 Đã gửi email reset MK cho ${name}`,'ok');
-    setTimeout(()=>{ document.getElementById('rf-'+key).classList.remove('open'); },2000);
+    toast('📨 Đã gửi email reset MK cho '+name,'ok');
+    setTimeout(()=>{ document.getElementById('rf-'+key).classList.remove('open'); }, 2000);
   }catch(e){
     errEl.textContent='❌ Lỗi: '+firebaseErrVi(e);
     errEl.style.cssText='display:block;color:var(--danger)';
   }
-};
+}
 
-/* ════════ LOGOUT — FIX: unsubscribe listener ════════ */
-window.confirmLogout=()=>{
+/* ════════ LOGOUT ════════ */
+function confirmLogout(){
   pendingAction={type:'logout'};
   openModal('🚪','Đăng xuất?','Bạn sẽ thoát khỏi trang quản trị.','danger','Đăng xuất');
-};
+}
 
 /* ════════ EXECUTE CONFIRM ════════ */
-window.executeConfirm=async()=>{
+async function executeConfirm(){
   closeModal();
   if(!pendingAction) return;
-  const{type,key,name}=pendingAction; pendingAction=null;
+  const {type,key,name} = pendingAction; pendingAction=null;
 
   if(type==='logout'){
-    // FIX: unsubscribe listener trước khi logout
-    if(usersListener){
-      off(ref(db,'users'),'value',usersListener);
-      usersListener=null;
+    if(usersListenerRef && usersListenerCb){
+      off(usersListenerRef,'value',usersListenerCb);
+      usersListenerRef=null; usersListenerCb=null;
     }
     await signOut(auth);
     allUsers=[];
@@ -1034,33 +1176,31 @@ window.executeConfirm=async()=>{
     document.getElementById('loginApp').style.display='flex';
     document.getElementById('l_ident').value='';
     document.getElementById('l_pass').value='';
-    // Reset bảng về trạng thái ban đầu
     document.getElementById('tblLoading').innerHTML='<div class="spinner"></div>Đang tải dữ liệu...';
     document.getElementById('tblLoading').style.display='block';
     document.getElementById('usersTable').style.display='none';
     document.getElementById('pendingSection').style.display='none';
+    document.getElementById('rulesNotice').style.display='none';
     toast('Đã đăng xuất','info'); return;
   }
 
   if(type==='approve_admin'){
     try{
-      await update(ref(db,'users/'+key),{role:'admin', adminRequestAt:null, approvedAt:Date.now()});
-      toast(`👑 Đã duyệt quyền Admin cho ${name}`,'ok');
-    }catch{ toast('Lỗi kết nối, thử lại sau','err') }
-    return;
+      await update(ref(db,'users/'+key),{role:'admin',adminRequestAt:null,approvedAt:Date.now()});
+      toast('👑 Đã duyệt quyền Admin cho '+name,'ok');
+    }catch(e){ toast('Lỗi: '+e.message,'err'); } return;
   }
   if(type==='reject_admin'){
     try{
-      await update(ref(db,'users/'+key),{role:'user', adminRequestAt:null, rejectedAt:Date.now()});
-      toast(`❌ Đã từ chối yêu cầu của ${name}`,'warn');
-    }catch{ toast('Lỗi kết nối, thử lại sau','err') }
-    return;
+      await update(ref(db,'users/'+key),{role:'user',adminRequestAt:null,rejectedAt:Date.now()});
+      toast('❌ Đã từ chối yêu cầu của '+name,'warn');
+    }catch(e){ toast('Lỗi: '+e.message,'err'); } return;
   }
   try{
-    if(type==='lock')  { await update(ref(db,'users/'+key),{locked:true});  toast(`🔒 Đã khóa tài khoản ${name}`,'warn'); }
-    if(type==='unlock'){ await update(ref(db,'users/'+key),{locked:false}); toast(`🔓 Đã mở khóa ${name}`,'ok'); }
-  }catch{ toast('Lỗi kết nối, thử lại sau','err') }
-};
+    if(type==='lock')  { await update(ref(db,'users/'+key),{locked:true});  toast('🔒 Đã khóa tài khoản '+name,'warn'); }
+    if(type==='unlock'){ await update(ref(db,'users/'+key),{locked:false}); toast('🔓 Đã mở khóa '+name,'ok'); }
+  }catch(e){ toast('Lỗi kết nối: '+e.message,'err'); }
+}
 
 /* ════════ MODAL ════════ */
 function openModal(icon,title,msg,type,label){
@@ -1071,20 +1211,23 @@ function openModal(icon,title,msg,type,label){
   cb.textContent=label; cb.className='modal-confirm '+type;
   document.getElementById('confirmModal').classList.add('open');
 }
-window.closeModal=()=>document.getElementById('confirmModal').classList.remove('open');
+function closeModal(){ document.getElementById('confirmModal').classList.remove('open'); }
 document.getElementById('confirmModal').addEventListener('click',e=>{
   if(e.target===document.getElementById('confirmModal')) closeModal();
 });
 
 /* ════════ UTILS ════════ */
 function esc(s){
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  return String(s||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
+// Enter key handler
 document.addEventListener('keydown',e=>{
   if(e.key!=='Enter') return;
   if(document.getElementById('loginApp').style.display!=='none'){
-    document.getElementById('pLogin').classList.contains('on')?window.login():window.register();
+    document.getElementById('pLogin').classList.contains('on') ? doLogin() : doRegister();
   }
 });
 </script>

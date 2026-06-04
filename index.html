@@ -484,7 +484,7 @@ td .uemail{font-size:12px;color:var(--text2)}
       <div class="tbl-wrap">
         <div class="tbl-loading" id="tblLoading"><div class="spinner"></div>Đang tải dữ liệu...</div>
         <table id="usersTable" style="display:none">
-          <thead><tr><th>Người dùng</th><th>Username</th><th>Trạng thái</th><th>Vai trò</th><th>Thao tác</th></tr></thead>
+          <thead><tr><th>Người dùng</th><th>Username</th><th>Trạng thái</th><th>Vai trò</th><th>Link redirect</th><th>Thao tác</th></tr></thead>
           <tbody id="usersTbody"></tbody>
         </table>
         <div class="empty-state" id="emptyState" style="display:none"><div class="es-icon">🔍</div><p>Không tìm thấy tài khoản phù hợp</p></div>
@@ -522,7 +522,7 @@ const cfg = {
   projectId:         "csdl-login",
   storageBucket:     "csdl-login.firebasestorage.app",
   messagingSenderId: "1036020118468",
-  appId:             "1:1036020118468:web:8b25fa3cae3d2ee9986a91"
+  appId:             "1:1036020118468:web:6fe17be2597334f9986a91"
 };
 const app  = initializeApp(cfg);
 const auth = getAuth(app);
@@ -660,7 +660,7 @@ window.register=async()=>{
       document.getElementById('reqAdminCheck').checked=false;
       setTimeout(showLogin,1600);
     }
-  }catch(e){showError('regError','❌ '+firebaseErrVi(e.code));}
+  }catch(e){showError('regError','❌ '+firebaseErrVi(e));}
   finally{ld(btn,false)}
 };
 
@@ -729,27 +729,37 @@ window.login=async()=>{
         loadUsers();
       });
     } else {
+      // FIX: dùng redirectUrl do admin cấp trong DB, fallback html.vn
+      const redirectUrl = u.redirectUrl || 'https://html.vn';
       showResult('✅','Approved!','Đăng nhập thành công. Đang chuyển hướng...','green',2000,()=>{
-        window.location.href='https://html.vn';
+        window.location.href = redirectUrl;
       });
     }
-  }catch(e){showError('loginError','❌ '+firebaseErrVi(e.code));}
+  }catch(e){showError('loginError','❌ '+firebaseErrVi(e));}
   finally{ld(btn,false)}
 };
 
 /* ════════ FIREBASE ERRORS → Tiếng Việt ════════ */
-function firebaseErrVi(code){
+function firebaseErrVi(e){
+  // e có thể là error object hoặc string code
+  const code = (typeof e === 'string') ? e : (e && (e.code || e.message)) || '';
   const map={
-    'auth/user-not-found':      'Email chưa được đăng ký',
-    'auth/wrong-password':      'Mật khẩu không đúng',
-    'auth/invalid-credential':  'Email hoặc mật khẩu không đúng',
-    'auth/email-already-in-use':'Email này đã được đăng ký',
-    'auth/invalid-email':       'Địa chỉ email không hợp lệ',
-    'auth/weak-password':       'Mật khẩu quá yếu, tối thiểu 6 ký tự',
-    'auth/too-many-requests':   'Quá nhiều lần thử. Vui lòng thử lại sau',
+    'auth/user-not-found':        'Email chưa được đăng ký',
+    'auth/wrong-password':        'Mật khẩu không đúng',
+    'auth/invalid-credential':    'Email hoặc mật khẩu không đúng',
+    'auth/email-already-in-use':  'Email này đã được đăng ký',
+    'auth/invalid-email':         'Địa chỉ email không hợp lệ',
+    'auth/weak-password':         'Mật khẩu quá yếu, tối thiểu 6 ký tự',
+    'auth/too-many-requests':     'Quá nhiều lần thử. Vui lòng thử lại sau',
     'auth/network-request-failed':'Lỗi kết nối mạng',
+    'auth/operation-not-allowed': 'Chức năng này chưa được bật trên Firebase',
+    'auth/configuration-not-found':'Cấu hình Firebase không hợp lệ',
+    'permission-denied':          'Không có quyền truy cập dữ liệu',
   };
-  return map[code]||('Đã có lỗi xảy ra ('+code+')');
+  if(map[code]) return map[code];
+  // trích code ngắn gọn từ message nếu có
+  const short = code.replace('Firebase: ','').replace(/\s*\(.*\)\./,'');
+  return short || 'Đã có lỗi xảy ra, vui lòng thử lại';
 }
 
 /* ════════ LOAD USERS — FIX: dùng get() thay onValue() để tránh trùng lặp ════════ */
@@ -779,7 +789,8 @@ function loadUsers(){
           username:   v.username   || '—',
           role:       v.role       || 'user',
           locked:     v.locked     === true,
-          adminRequestAt: v.adminRequestAt || null
+          adminRequestAt: v.adminRequestAt || null,
+          redirectUrl:    v.redirectUrl    || ""
         });
       });
     }
@@ -854,6 +865,24 @@ function renderUsers(users){
       <td><span class="badge ${u.locked?'badge-locked':'badge-active'}">${u.locked?'🔒 Đã khóa':'✅ Hoạt động'}</span></td>
       <td><span class="badge ${u.role==='admin'?'badge-admin':'badge-user'}">${u.role==='admin'?'👑 Admin':'👤 User'}</span></td>
       <td>
+        ${u.role!=='admin'?`
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          ${u.redirectUrl
+            ?`<a href="${esc(u.redirectUrl)}" target="_blank" style="font-size:11px;font-weight:700;color:var(--success);background:rgba(14,164,112,.08);border:1px solid rgba(14,164,112,.25);padding:3px 9px;border-radius:6px;text-decoration:none;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block" title="${esc(u.redirectUrl)}">🔗 ${esc(u.redirectUrl.replace(/^https?:\/\//,'').slice(0,28))}${u.redirectUrl.length>35?'…':''}</a>`
+            :`<span style="font-size:11px;color:var(--muted);font-style:italic">Chưa có link</span>`}
+          <button class="act-btn act-rename" style="font-size:10px;padding:4px 8px" onclick="toggleLinkForm('${u.key}','${esc(u.redirectUrl||'')}')">✏️ Đặt link</button>
+        </div>
+        <div class="inline-form rename-form" id="lf-${u.key}" style="flex-direction:column;align-items:stretch;gap:8px;margin-top:6px">
+          <input type="url" id="nl-${u.key}" placeholder="https://example.com/..." style="width:100%">
+          <div style="display:flex;gap:8px">
+            <button class="btn-save blue" onclick="saveLink('${u.key}','${esc(u.name)}')">💾 Lưu link</button>
+            <button class="btn-cancel-form" onclick="toggleLinkForm('${u.key}')">✕ Hủy</button>
+          </div>
+          <div id="lf-err-${u.key}" style="display:none;font-size:11px;font-weight:600;color:var(--danger)"></div>
+        </div>`
+        :`<span style="font-size:11px;color:var(--muted)">—</span>`}
+      </td>
+      <td>
         <div class="actions">
           ${u.locked
             ?`<button class="act-btn act-unlock" onclick="promptUnlock('${u.key}','${esc(u.name)}')">🔓 Mở khóa</button>`
@@ -863,8 +892,8 @@ function renderUsers(users){
         </div>
         <div class="inline-form rename-form" id="rnf-${u.key}" style="flex-direction:column;align-items:stretch;gap:10px">
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <input type="text"     id="nn-${u.key}" placeholder="Họ và tên mới..."  maxlength="60" style="flex:1;min-width:120px">
-            <input type="text"     id="nu-${u.key}" placeholder="Username mới..."   maxlength="30" style="flex:1;min-width:120px;text-transform:lowercase">
+            <input type="text" id="nn-${u.key}" placeholder="Họ và tên mới..."  maxlength="60" style="flex:1;min-width:120px">
+            <input type="text" id="nu-${u.key}" placeholder="Username mới..."   maxlength="30" style="flex:1;min-width:120px;text-transform:lowercase">
           </div>
           <div style="display:flex;gap:8px">
             <button class="btn-save blue"   onclick="saveName('${u.key}')">💾 Lưu</button>
@@ -976,7 +1005,7 @@ window.sendResetEmail=async(key,email,name)=>{
     toast(`📨 Đã gửi email reset MK cho ${name}`,'ok');
     setTimeout(()=>{ document.getElementById('rf-'+key).classList.remove('open'); },2000);
   }catch(e){
-    errEl.textContent='❌ Lỗi: '+firebaseErrVi(e.code);
+    errEl.textContent='❌ Lỗi: '+firebaseErrVi(e);
     errEl.style.cssText='display:block;color:var(--danger)';
   }
 };

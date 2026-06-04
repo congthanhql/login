@@ -575,8 +575,7 @@ window.toggleRenameForm   = toggleRenameForm;
 window.saveName           = saveName;
 window.toggleResetForm    = toggleResetForm;
 window.sendResetEmail_fn  = sendResetEmail_fn;
-window.toggleLinkForm     = toggleLinkForm;
-window.saveLink           = saveLink;
+
 
 /* ════════ WELCOME ════════ */
 (function initWelcome(){
@@ -969,19 +968,35 @@ function renderUsers(users){
       <td><span class="badge ${u.role==='admin'?'badge-admin':'badge-user'}">${u.role==='admin'?'👑 Admin':'👤 User'}</span></td>
       <td>
         ${u.role!=='admin'?`
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap" id="link-display-${u.key}">
           ${u.redirectUrl
-            ?`<a href="${esc(u.redirectUrl)}" target="_blank" style="font-size:11px;font-weight:700;color:var(--success);background:rgba(14,164,112,.08);border:1px solid rgba(14,164,112,.25);padding:3px 9px;border-radius:6px;text-decoration:none;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block" title="${esc(u.redirectUrl)}">🔗 ${esc(u.redirectUrl.replace(/^https?:\/\//,'').slice(0,28))}${u.redirectUrl.length>35?'…':''}</a>`
+            ?`<a href="${esc(u.redirectUrl)}" target="_blank"
+                style="font-size:11px;font-weight:700;color:var(--success);background:rgba(14,164,112,.08);
+                border:1px solid rgba(14,164,112,.25);padding:3px 9px;border-radius:6px;text-decoration:none;
+                max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block"
+                title="${esc(u.redirectUrl)}">🔗 ${esc(u.redirectUrl.replace(/^https?:\/\//,'').slice(0,30))}${u.redirectUrl.length>37?'…':''}</a>`
             :`<span style="font-size:11px;color:var(--muted);font-style:italic">Chưa có link</span>`}
-          <button class="act-btn act-rename" style="font-size:10px;padding:4px 8px" onclick="toggleLinkForm('${u.key}','${esc(u.redirectUrl||'')}')">✏️ Đặt link</button>
+          <button class="act-btn act-rename" style="font-size:10px;padding:4px 10px"
+            data-uid="${u.key}" onclick="openLinkForm(this)">✏️ Đặt link</button>
         </div>
-        <div class="inline-form rename-form" id="lf-${u.key}" style="flex-direction:column;align-items:stretch;gap:8px;margin-top:6px">
-          <input type="url" id="nl-${u.key}" placeholder="https://example.com/...">
-          <div style="display:flex;gap:8px">
-            <button class="btn-save blue" onclick="saveLink('${u.key}','${esc(u.name)}')">💾 Lưu link</button>
-            <button class="btn-cancel-form" onclick="toggleLinkForm('${u.key}')">✕ Hủy</button>
+        <div id="lf-${u.key}" style="display:none;margin-top:8px;background:var(--surface);border:1.5px solid var(--accent);border-radius:12px;padding:14px 16px;flex-direction:column;gap:10px;animation:fade-up .2s ease both">
+          <div style="font-size:12px;font-weight:700;color:var(--text2)">🔗 Đặt link redirect cho <b>${esc(u.name)}</b></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="url" id="nl-${u.key}"
+              placeholder="https://example.com/..."
+              style="flex:1;background:var(--input-bg);border:1.5px solid var(--border);border-radius:9px;
+              color:var(--text);padding:9px 13px;font-size:13px;font-family:'Be Vietnam Pro',sans-serif;
+              outline:none;transition:border-color .2s"
+              onfocus="this.style.borderColor='var(--accent)'"
+              onblur="this.style.borderColor='var(--border)'"
+              onkeydown="if(event.key==='Enter'){saveLinkById('${u.key}')}if(event.key==='Escape'){closeLinkForm('${u.key}')}">
           </div>
-          <div id="lf-err-${u.key}" style="display:none;font-size:11px;font-weight:600;color:var(--danger)"></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="btn-save blue" style="flex:1" onclick="saveLinkById('${u.key}')">💾 Lưu link</button>
+            <button class="btn-cancel-form" onclick="closeLinkForm('${u.key}')">✕ Hủy</button>
+          </div>
+          <div id="lf-err-${u.key}" style="display:none;font-size:11.5px;font-weight:700;padding:7px 10px;border-radius:8px;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.2);color:var(--danger)"></div>
+          <div id="lf-ok-${u.key}"  style="display:none;font-size:11.5px;font-weight:700;padding:7px 10px;border-radius:8px;background:rgba(14,164,112,.08);border:1px solid rgba(14,164,112,.2);color:var(--success)"></div>
         </div>` : `<span style="font-size:11px;color:var(--muted)">—</span>`}
       </td>
       <td>
@@ -1094,32 +1109,78 @@ async function saveName(key){
 }
 
 /* ════════ LINK REDIRECT ════════ */
-function toggleLinkForm(key,currentUrl){
+function openLinkForm(btn){
+  const key = btn.getAttribute('data-uid');
+  // Đóng tất cả form khác của user này
   const rnf=document.getElementById('rnf-'+key);
   if(rnf) rnf.classList.remove('open');
   const rf=document.getElementById('rf-'+key);
   if(rf) rf.classList.remove('open');
+  // Toggle form link
+  const lf = document.getElementById('lf-'+key);
+  const isOpen = lf.style.display==='flex';
+  if(isOpen){
+    lf.style.display='none'; return;
+  }
+  // Lấy URL hiện tại từ allUsers (không dùng string inline)
+  const userObj = allUsers.find(u=>u.key===key);
+  const currentUrl = userObj ? (userObj.redirectUrl||'') : '';
+  // Reset state
+  const errEl=document.getElementById('lf-err-'+key);
+  const okEl =document.getElementById('lf-ok-'+key);
+  if(errEl){ errEl.style.display='none'; errEl.textContent=''; }
+  if(okEl) { okEl.style.display='none';  okEl.textContent='';  }
+  // Hiện form
+  lf.style.display='flex';
+  const inp=document.getElementById('nl-'+key);
+  inp.value=currentUrl;
+  setTimeout(()=>inp.focus(), 60);
+}
+function closeLinkForm(key){
   const lf=document.getElementById('lf-'+key);
-  lf.classList.toggle('open');
-  if(lf.classList.contains('open')&&currentUrl!==undefined){
-    document.getElementById('nl-'+key).value=currentUrl;
-    document.getElementById('nl-'+key).focus();
-  }
+  if(lf) lf.style.display='none';
 }
-async function saveLink(key,name){
-  const url   = document.getElementById('nl-'+key).value.trim();
+async function saveLinkById(key){
+  const inp   = document.getElementById('nl-'+key);
+  const url   = inp.value.trim();
   const errEl = document.getElementById('lf-err-'+key);
+  const okEl  = document.getElementById('lf-ok-'+key);
   errEl.style.display='none';
+  okEl.style.display='none';
+
+  // Validate
   if(url && !url.startsWith('http')){
-    errEl.textContent='⚠️ URL phải bắt đầu bằng http:// hoặc https://';
-    errEl.style.display='block'; return;
+    errEl.textContent='⚠️ URL phải bắt đầu bằng https:// hoặc http://';
+    errEl.style.display='block'; inp.focus(); return;
   }
+
+  // Tìm tên user
+  const userObj = allUsers.find(u=>u.key===key);
+  const name = userObj ? userObj.name : key;
+
+  // Disable input trong lúc lưu
+  inp.disabled=true;
   try{
-    await update(ref(db,'users/'+key),{redirectUrl: url});
-    document.getElementById('lf-'+key).classList.remove('open');
-    toast('✅ Đã lưu link redirect cho '+name,'ok');
-  }catch(e){ toast('Lỗi khi lưu: '+e.message,'err'); }
+    await update(ref(db,'users/'+key), {redirectUrl: url});
+    okEl.textContent = url
+      ? '✅ Đã lưu: '+url
+      : '✅ Đã xóa link redirect';
+    okEl.style.display='block';
+    toast('🔗 Đã lưu link redirect cho '+name, 'ok');
+    // Tự đóng sau 1.5s
+    setTimeout(()=>{ closeLinkForm(key); }, 1500);
+  } catch(e){
+    errEl.textContent='❌ Lỗi lưu: '+e.message;
+    errEl.style.display='block';
+    toast('Lỗi khi lưu link: '+e.message, 'err');
+  } finally {
+    inp.disabled=false;
+  }
 }
+// Expose thêm các hàm mới
+window.openLinkForm   = openLinkForm;
+window.closeLinkForm  = closeLinkForm;
+window.saveLinkById   = saveLinkById;
 
 /* ════════ RESET PASSWORD ════════ */
 function toggleResetForm(key,email,name){
